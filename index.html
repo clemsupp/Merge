@@ -1,273 +1,454 @@
+```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+      content="width=device-width,
+               initial-scale=1,
+               maximum-scale=1,
+               user-scalable=no,
+               viewport-fit=cover">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+
 <title>Slime Merge</title>
 
 <style>
 * {
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
     user-select: none;
+    -webkit-user-select: none;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+
+    touch-action: none;
+    overscroll-behavior: none;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    background:
+        radial-gradient(
+            circle at 50% -10%,
+            #31463d 0%,
+            #18221d 38%,
+            #0b0f0c 100%
+        );
+
+    color: white;
 }
 
 body {
-    margin: 0;
-    min-height: 100vh;
-    font-family: Arial, Helvetica, sans-serif;
-    background:
-        radial-gradient(circle at 50% 0%, #263b36 0%, #111713 45%, #090c0a 100%);
-    color: white;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow-x: hidden;
 }
 
+/* =========================
+   JEU
+========================= */
+
 .game {
-    width: min(94vw, 650px);
-    padding: 25px 0 35px;
+    width: min(92vw, 520px);
+
+    height: 100dvh;
+    max-height: 100dvh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding:
+        max(8px, env(safe-area-inset-top))
+        0
+        max(8px, env(safe-area-inset-bottom));
+
+    overflow: hidden;
 }
+
+/* =========================
+   HEADER
+========================= */
 
 .header {
     text-align: center;
-    margin-bottom: 22px;
+    flex-shrink: 0;
+    margin-bottom: 8px;
 }
 
 .title {
-    font-size: 42px;
-    font-weight: 900;
-    letter-spacing: -2px;
     margin: 0;
+
+    font-size: clamp(27px, 7vw, 38px);
+    line-height: 1;
+
+    font-weight: 950;
+    letter-spacing: -1.8px;
+
     text-shadow:
-        0 3px 0 #07100b,
-        0 0 25px rgba(102, 255, 176, 0.18);
+        0 3px 0 #070b08,
+        0 0 25px rgba(126,255,173,.12);
 }
 
 .subtitle {
-    margin-top: 5px;
-    color: #91a39a;
-    font-size: 14px;
+    margin-top: 4px;
+
+    font-size: 10px;
+    color: #89988f;
 }
 
+/* =========================
+   ARGENT
+========================= */
+
 .money-box {
-    margin: 22px auto;
-    width: fit-content;
-    min-width: 180px;
-    padding: 10px 24px;
-    border-radius: 18px;
-    background: rgba(24, 31, 27, .9);
-    border: 1px solid rgba(255,255,255,.08);
+    align-self: center;
+
+    min-width: 125px;
+
+    padding: 6px 17px 7px;
+
+    margin: 5px 0 9px;
+
+    border-radius: 14px;
+
+    text-align: center;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(35,45,39,.96),
+            rgba(21,27,24,.96)
+        );
+
+    border: 1px solid rgba(255,255,255,.07);
+
     box-shadow:
-        0 12px 35px rgba(0,0,0,.35),
+        0 8px 20px rgba(0,0,0,.28),
         inset 0 1px rgba(255,255,255,.05);
 }
 
 .money-label {
-    color: #8f9d96;
-    font-size: 12px;
+    color: #829088;
+    font-size: 8px;
+
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 1px;
 }
 
 .money {
-    margin-top: 2px;
-    color: #d9ff72;
-    font-size: 27px;
-    font-weight: 900;
+    margin-top: 1px;
+
+    color: #d9ff76;
+
+    font-size: 19px;
+    line-height: 20px;
+
+    font-weight: 950;
 }
+
+/* =========================
+   PLATEAU
+========================= */
 
 .board {
     position: relative;
+
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 13px;
-    padding: 15px;
-    border-radius: 28px;
+
+    gap: 7px;
+
+    width: 100%;
+
+    padding: 8px;
+
+    border-radius: 20px;
 
     background:
-        linear-gradient(145deg, #242d28, #161c18);
+        linear-gradient(
+            145deg,
+            #27312b,
+            #151b17
+        );
 
     border: 1px solid rgba(255,255,255,.08);
 
     box-shadow:
-        0 25px 60px rgba(0,0,0,.55),
+        0 18px 35px rgba(0,0,0,.48),
         inset 0 1px rgba(255,255,255,.06);
+
+    flex-shrink: 0;
 }
 
 .slot {
+    position: relative;
+
+    width: 100%;
     aspect-ratio: 1;
-    min-height: 130px;
-    border-radius: 22px;
 
-    background:
-        radial-gradient(circle at 50% 35%, rgba(255,255,255,.035), transparent 55%),
-        #111713;
-
-    border: 2px solid #202a24;
+    border-radius: 15px;
 
     display: flex;
     justify-content: center;
     align-items: center;
 
-    position: relative;
-    transition:
-        transform .15s ease,
-        border-color .15s ease,
-        background .15s ease;
+    background:
+        radial-gradient(
+            circle at 50% 35%,
+            rgba(255,255,255,.035),
+            transparent 60%
+        ),
+        #101511;
+
+    border: 1.5px solid #202923;
 
     box-shadow:
-        inset 0 4px 10px rgba(0,0,0,.25),
-        inset 0 -5px 12px rgba(0,0,0,.2);
-}
+        inset 0 4px 9px rgba(0,0,0,.28),
+        inset 0 -4px 9px rgba(0,0,0,.17);
 
-.slot.drag-over {
-    transform: scale(.97);
-    border-color: #9fff69;
-    background: #172219;
+    transition:
+        background .15s ease,
+        border-color .15s ease,
+        transform .15s ease;
 }
 
 .slot.empty::after {
     content: "+";
-    position: absolute;
-    color: #28332d;
-    font-size: 32px;
+
+    color: #26312b;
+
+    font-size: 24px;
     font-weight: 300;
 }
 
+.slot.target {
+    border-color: #b5ff67;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(173,255,91,.13),
+            transparent 65%
+        );
+
+    transform: scale(.96);
+
+    box-shadow:
+        inset 0 0 15px rgba(164,255,90,.08),
+        0 0 16px rgba(150,255,80,.12);
+}
+
+.slot.target-merge {
+    border-color: #ffffff;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(194,255,103,.24),
+            transparent 65%
+        );
+
+    transform: scale(.92);
+
+    animation: targetPulse .55s infinite alternate;
+}
+
+@keyframes targetPulse {
+    from {
+        box-shadow:
+            0 0 8px rgba(184,255,100,.2);
+    }
+
+    to {
+        box-shadow:
+            0 0 24px rgba(184,255,100,.55);
+    }
+}
+
+/* =========================
+   SLIME
+========================= */
+
 .slime {
+    position: relative;
+
     width: 76%;
     height: 76%;
-    position: relative;
-    cursor: grab;
 
     border-radius:
         48% 52% 45% 55% /
         55% 48% 52% 45%;
 
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+
+    box-shadow:
+        inset 7px 9px 10px rgba(255,255,255,.28),
+        inset -8px -10px 12px rgba(0,0,0,.27),
+        0 7px 11px rgba(0,0,0,.43);
 
     transform: translateY(2px);
 
-    box-shadow:
-        inset 8px 10px 12px rgba(255,255,255,.28),
-        inset -10px -13px 15px rgba(0,0,0,.25),
-        0 9px 14px rgba(0,0,0,.45);
+    will-change: transform;
 
-    transition: transform .15s ease, filter .15s ease;
+    transition:
+        transform .12s ease,
+        filter .12s ease;
 }
 
-.slime:hover {
-    transform: translateY(-3px) scale(1.04);
-    filter: brightness(1.08);
-}
+.slime.dragging {
+    transform:
+        scale(1.12)
+        rotate(-3deg);
 
-.slime:active {
-    cursor: grabbing;
-    transform: scale(.94);
+    filter:
+        brightness(1.12)
+        drop-shadow(0 10px 15px rgba(0,0,0,.4));
+
+    z-index: 1000;
 }
 
 .slime::before {
     content: "";
+
     position: absolute;
-    width: 38%;
+
+    width: 39%;
     height: 21%;
-    left: 17%;
-    top: 14%;
+
+    left: 16%;
+    top: 13%;
+
     border-radius: 50%;
-    background: rgba(255,255,255,.7);
+
+    background: rgba(255,255,255,.68);
+
     transform: rotate(-25deg);
-    filter: blur(1px);
+
+    filter: blur(.7px);
 }
 
 .slime::after {
     content: "";
+
     position: absolute;
+
     width: 13%;
     height: 8%;
+
     left: 32%;
     top: 36%;
+
     border-radius: 50%;
-    background: rgba(255,255,255,.35);
+
+    background: rgba(255,255,255,.3);
 }
 
 .slime-content {
     position: relative;
-    z-index: 3;
+    z-index: 2;
+
     text-align: center;
+
+    pointer-events: none;
+
     text-shadow:
-        0 2px 3px rgba(0,0,0,.45);
+        0 2px 3px rgba(0,0,0,.42);
 }
 
 .slime-icon {
-    font-size: 31px;
+    font-size: clamp(19px, 5vw, 29px);
+
     line-height: 1;
-    filter: drop-shadow(0 2px 2px rgba(0,0,0,.25));
 }
 
 .level {
-    margin-top: 4px;
-    font-size: 16px;
-    font-weight: 900;
+    margin-top: 2px;
+
+    font-size: clamp(10px, 2.7vw, 14px);
+
+    line-height: 1;
+
+    font-weight: 950;
 }
 
 .level-name {
-    margin-top: 1px;
-    font-size: 10px;
-    font-weight: bold;
-    opacity: .85;
+    margin-top: 2px;
+
+    font-size: clamp(6px, 1.8vw, 9px);
+
+    line-height: 1;
+
+    font-weight: 800;
+
+    opacity: .86;
 }
 
-/* Couleurs des niveaux */
+/* =========================
+   COULEURS
+========================= */
 
 .level-1 {
     background:
-        radial-gradient(circle at 35% 25%, #d7ff91, transparent 20%),
+        radial-gradient(circle at 35% 25%, #dfff9c, transparent 20%),
         linear-gradient(145deg, #9be45b, #54a833);
 }
 
 .level-2 {
     background:
-        radial-gradient(circle at 35% 25%, #baffff, transparent 20%),
+        radial-gradient(circle at 35% 25%, #c0ffff, transparent 20%),
         linear-gradient(145deg, #55e4db, #218f9a);
 }
 
 .level-3 {
     background:
-        radial-gradient(circle at 35% 25%, #e1a9ff, transparent 20%),
+        radial-gradient(circle at 35% 25%, #edc4ff, transparent 20%),
         linear-gradient(145deg, #bd69ed, #7137a7);
 }
 
 .level-4 {
     background:
-        radial-gradient(circle at 35% 25%, #ffe4a2, transparent 20%),
+        radial-gradient(circle at 35% 25%, #ffe9ae, transparent 20%),
         linear-gradient(145deg, #ffbd4a, #d46a20);
 }
 
 .level-5 {
     background:
-        radial-gradient(circle at 35% 25%, #ffb2c5, transparent 20%),
+        radial-gradient(circle at 35% 25%, #ffc1d1, transparent 20%),
         linear-gradient(145deg, #ff668d, #b52f62);
 }
 
 .level-6 {
     background:
-        radial-gradient(circle at 35% 25%, #d8c6ff, transparent 20%),
+        radial-gradient(circle at 35% 25%, #e2d8ff, transparent 20%),
         linear-gradient(145deg, #7d72ff, #4238b4);
 }
 
 .level-7 {
     background:
-        radial-gradient(circle at 35% 25%, #fff7a7, transparent 20%),
+        radial-gradient(circle at 35% 25%, #fff9ae, transparent 20%),
         linear-gradient(145deg, #f5e85b, #bda51c);
 }
 
 .level-8 {
     background:
-        radial-gradient(circle at 35% 25%, #ffffff, transparent 20%),
-        linear-gradient(145deg, #8bffd0, #22a979);
+        radial-gradient(circle at 35% 25%, #e2ffe9, transparent 20%),
+        linear-gradient(145deg, #70efae, #22a979);
 }
 
 .level-9 {
@@ -279,163 +460,207 @@ body {
 .level-10 {
     background:
         radial-gradient(circle at 35% 25%, #ffffff, transparent 20%),
-        linear-gradient(145deg, #fff, #9de6ff);
+        linear-gradient(145deg, #ffffff, #9de6ff);
+
     box-shadow:
-        inset 8px 10px 12px rgba(255,255,255,.5),
-        inset -10px -13px 15px rgba(0,0,0,.15),
-        0 0 25px rgba(143, 226, 255, .65);
+        inset 7px 9px 10px rgba(255,255,255,.55),
+        inset -8px -10px 12px rgba(0,0,0,.14),
+        0 0 22px rgba(143,226,255,.65);
 }
+
+/* =========================
+   ZONE TACTILE
+========================= */
+
+.drag-clone {
+    position: fixed;
+
+    width: 100px;
+    height: 100px;
+
+    pointer-events: none;
+
+    z-index: 9999;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transform:
+        translate(-50%, -50%)
+        scale(1.08);
+
+    opacity: .96;
+
+    filter:
+        drop-shadow(0 12px 15px rgba(0,0,0,.38));
+}
+
+.drag-clone .slime {
+    width: 76px;
+    height: 76px;
+}
+
+/* =========================
+   BOUTONS
+========================= */
 
 .controls {
     display: flex;
     justify-content: center;
-    gap: 10px;
-    margin-top: 20px;
-}
 
-button {
-    border: 0;
-    cursor: pointer;
-    font-family: inherit;
-    font-weight: 900;
+    margin-top: 10px;
+
+    flex-shrink: 0;
 }
 
 .buy {
-    padding: 15px 32px;
-    border-radius: 17px;
-    color: #17200e;
-    font-size: 17px;
+    min-width: 170px;
 
-    background: linear-gradient(145deg, #caff69, #82c83e);
+    padding: 10px 22px;
+
+    border: 0;
+    border-radius: 13px;
+
+    color: #17200e;
+
+    font-size: 14px;
+    font-weight: 950;
+
+    background:
+        linear-gradient(
+            145deg,
+            #d0ff73,
+            #82c83e
+        );
 
     box-shadow:
-        0 7px 0 #4e7926,
-        0 12px 25px rgba(117, 198, 62, .2);
+        0 4px 0 #4e7926,
+        0 8px 18px rgba(117,198,62,.18);
 
-    transition: transform .1s ease, box-shadow .1s ease;
-}
-
-.buy:hover {
-    transform: translateY(-2px);
+    touch-action: manipulation;
 }
 
 .buy:active {
-    transform: translateY(5px);
+    transform: translateY(3px);
+
     box-shadow:
-        0 2px 0 #4e7926,
-        0 5px 15px rgba(117, 198, 62, .15);
+        0 1px 0 #4e7926;
 }
 
 .buy:disabled {
-    cursor: not-allowed;
-    opacity: .45;
-    transform: none;
-    box-shadow: 0 4px 0 #354127;
+    opacity: .4;
 }
 
-.secondary {
-    padding: 13px 17px;
-    border-radius: 15px;
-    color: #c4cec8;
-    background: #202822;
-    border: 1px solid #303b34;
-}
-
-.secondary:hover {
-    background: #28322c;
-}
-
-.info {
-    margin-top: 18px;
-    text-align: center;
-    color: #7f8b84;
-    font-size: 12px;
-    line-height: 1.6;
-}
+/* =========================
+   MESSAGE
+========================= */
 
 .message {
-    min-height: 20px;
-    margin-top: 9px;
+    height: 17px;
+
+    margin-top: 4px;
+
     text-align: center;
-    color: #b9d5c4;
-    font-size: 13px;
-    font-weight: bold;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    color: #bcd6c4;
+
+    flex-shrink: 0;
 }
 
+/* =========================
+   SAUVEGARDE
+========================= */
+
 .save-panel {
-    margin-top: 22px;
-    padding: 18px;
-    border-radius: 20px;
-    background: rgba(20,26,22,.8);
-    border: 1px solid rgba(255,255,255,.06);
+    margin-top: 7px;
+
+    padding: 8px 10px;
+
+    border-radius: 14px;
+
+    background:
+        rgba(19,25,21,.82);
+
+    border: 1px solid rgba(255,255,255,.055);
+
+    flex-shrink: 0;
 }
 
 .save-title {
+    margin-bottom: 5px;
+
+    font-size: 10px;
+
     font-weight: 900;
-    margin-bottom: 10px;
+
+    color: #a9b6ae;
 }
 
 .save-area {
     width: 100%;
-    min-height: 75px;
-    resize: vertical;
+    height: 38px;
+
+    resize: none;
 
     border: 1px solid #303a34;
-    border-radius: 12px;
-
-    background: #0c100d;
-    color: #aebbb3;
-
-    padding: 10px;
-    font-family: monospace;
-    font-size: 11px;
+    border-radius: 8px;
 
     outline: none;
-}
 
-.save-area:focus {
-    border-color: #75a75d;
+    background: #0b0f0c;
+
+    color: #8f9c94;
+
+    padding: 6px;
+
+    font-family: monospace;
+
+    font-size: 8px;
+
+    user-select: text;
+    -webkit-user-select: text;
+
+    touch-action: auto;
 }
 
 .save-buttons {
     display: flex;
-    gap: 8px;
-    margin-top: 9px;
+
+    gap: 6px;
+
+    margin-top: 5px;
 }
 
 .save-buttons button {
     flex: 1;
-    padding: 10px;
-    border-radius: 11px;
-    color: #c8d3cc;
-    background: #252e28;
-    border: 1px solid #333d37;
+
+    padding: 7px;
+
+    border: 1px solid #303a34;
+
+    border-radius: 8px;
+
+    background: #242d27;
+
+    color: #c5d0c9;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    touch-action: manipulation;
 }
 
-.save-buttons button:hover {
-    background: #2e3932;
-}
+/* =========================
+   ANIMATIONS
+========================= */
 
-.merge-animation {
-    animation: merge .4s ease;
-}
-
-.buy-animation {
-    animation: appear .35s ease;
-}
-
-@keyframes merge {
-    0% {
-        transform: scale(.7);
-        opacity: .4;
-    }
-    45% {
-        transform: scale(1.15);
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
+.appear {
+    animation: appear .38s cubic-bezier(.2,.9,.3,1.3);
 }
 
 @keyframes appear {
@@ -443,42 +668,140 @@ button {
         transform: scale(0);
         opacity: 0;
     }
-    70% {
-        transform: scale(1.1);
+
+    65% {
+        transform: scale(1.15);
+        opacity: 1;
     }
+
     100% {
         transform: scale(1);
-        opacity: 1;
     }
 }
 
-@media (max-width: 520px) {
-    .game {
-        width: 95vw;
+.merge-pop {
+    animation: mergePop .5s cubic-bezier(.15,.9,.25,1.25);
+}
+
+@keyframes mergePop {
+
+    0% {
+        transform: scale(.45);
+        opacity: .2;
+    }
+
+    35% {
+        transform: scale(1.25);
+        filter: brightness(1.6);
+    }
+
+    70% {
+        transform: scale(.92);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+        filter: brightness(1);
+    }
+}
+
+.merge-flash {
+    position: fixed;
+
+    width: 80px;
+    height: 80px;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    z-index: 9998;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,255,255,.95) 0%,
+            rgba(191,255,99,.7) 20%,
+            rgba(191,255,99,0) 70%
+        );
+
+    transform: translate(-50%, -50%);
+
+    animation: flash .55s ease-out forwards;
+}
+
+@keyframes flash {
+    0% {
+        transform:
+            translate(-50%,-50%)
+            scale(.3);
+
+        opacity: 1;
+    }
+
+    100% {
+        transform:
+            translate(-50%,-50%)
+            scale(2.1);
+
+        opacity: 0;
+    }
+}
+
+/* =========================
+   PETITS ÉCRANS
+========================= */
+
+@media (max-height: 650px) {
+
+    .header {
+        margin-bottom: 4px;
     }
 
     .title {
-        font-size: 34px;
+        font-size: 28px;
+    }
+
+    .subtitle {
+        display: none;
+    }
+
+    .money-box {
+        margin: 3px 0 6px;
+        padding: 4px 14px;
+    }
+
+    .money {
+        font-size: 17px;
+    }
+
+    .board {
+        gap: 5px;
+        padding: 6px;
     }
 
     .slot {
-        min-height: 95px;
-    }
-
-    .slime-icon {
-        font-size: 24px;
-    }
-
-    .level {
-        font-size: 13px;
-    }
-
-    .level-name {
-        font-size: 8px;
+        border-radius: 12px;
     }
 
     .controls {
-        flex-wrap: wrap;
+        margin-top: 7px;
+    }
+
+    .save-panel {
+        margin-top: 5px;
+    }
+}
+
+@media (max-height: 560px) {
+
+    .save-panel {
+        display: none;
+    }
+
+    .message {
+        display: none;
     }
 }
 </style>
@@ -490,8 +813,9 @@ button {
 
     <div class="header">
         <h1 class="title">Slime Merge</h1>
+
         <div class="subtitle">
-            Fusionne les slimes pour créer des niveaux toujours plus élevés
+            Fusionne tes slimes pour monter de niveau
         </div>
     </div>
 
@@ -501,27 +825,33 @@ button {
     </div>
 
     <div class="board" id="board">
+
         <div class="slot empty" data-index="0"></div>
         <div class="slot empty" data-index="1"></div>
         <div class="slot empty" data-index="2"></div>
+
         <div class="slot empty" data-index="3"></div>
         <div class="slot empty" data-index="4"></div>
         <div class="slot empty" data-index="5"></div>
+
         <div class="slot empty" data-index="6"></div>
         <div class="slot empty" data-index="7"></div>
         <div class="slot empty" data-index="8"></div>
+
     </div>
 
     <div class="message" id="message"></div>
 
     <div class="controls">
-        <button class="buy" id="buyButton">
+
+        <button
+            class="buy"
+            id="buyButton"
+            type="button"
+        >
             Acheter · 10 🪙
         </button>
-    </div>
 
-    <div class="info">
-        Glisse un slime sur un autre slime du même niveau pour les fusionner.
     </div>
 
     <div class="save-panel">
@@ -533,31 +863,42 @@ button {
         <textarea
             class="save-area"
             id="saveArea"
-            placeholder="Ton code de sauvegarde apparaîtra ici..."
+            placeholder="Code de sauvegarde..."
             spellcheck="false"
         ></textarea>
 
         <div class="save-buttons">
-            <button id="exportButton">Exporter</button>
-            <button id="importButton">Importer</button>
+
+            <button
+                id="exportButton"
+                type="button"
+            >
+                Exporter
+            </button>
+
+            <button
+                id="importButton"
+                type="button"
+            >
+                Importer
+            </button>
+
         </div>
 
     </div>
 
 </div>
 
+
 <script>
 
-/* =========================
+/* =====================================================
    CONFIGURATION
-========================= */
+===================================================== */
 
 const MAX_LEVEL = 10;
 const BUY_PRICE = 10;
 
-/*
-    Les noms peuvent facilement être changés.
-*/
 const LEVEL_NAMES = [
     "Petit slime",
     "Slime bleu",
@@ -585,9 +926,9 @@ const LEVEL_ICONS = [
 ];
 
 
-/* =========================
-   ÉTAT DU JEU
-========================= */
+/* =====================================================
+   ÉTAT
+===================================================== */
 
 let money = 100;
 
@@ -597,221 +938,576 @@ let slots = [
     null, null, null
 ];
 
-let draggedIndex = null;
+
+/* =====================================================
+   ÉLÉMENTS
+===================================================== */
+
+const board =
+    document.getElementById("board");
+
+const moneyElement =
+    document.getElementById("money");
+
+const buyButton =
+    document.getElementById("buyButton");
+
+const messageElement =
+    document.getElementById("message");
+
+const saveArea =
+    document.getElementById("saveArea");
 
 
-/* =========================
-   DOM
-========================= */
+/* =====================================================
+   DRAG TACTILE
+===================================================== */
 
-const board = document.getElementById("board");
-const moneyElement = document.getElementById("money");
-const buyButton = document.getElementById("buyButton");
-const messageElement = document.getElementById("message");
-const saveArea = document.getElementById("saveArea");
+let drag = {
+
+    active: false,
+
+    index: null,
+
+    pointerId: null,
+
+    offsetX: 0,
+    offsetY: 0,
+
+    clone: null,
+
+    currentTarget: null
+};
 
 
-/* =========================
-   AFFICHAGE
-========================= */
+/* =====================================================
+   AFFICHAGE ARGENT
+===================================================== */
 
 function updateMoney() {
-    moneyElement.textContent = money.toLocaleString("fr-FR");
+
+    moneyElement.textContent =
+        money.toLocaleString("fr-FR");
+
+    const full =
+        slots.every(slot => slot !== null);
 
     buyButton.disabled =
-        money < BUY_PRICE ||
-        slots.every(slot => slot !== null);
+        money < BUY_PRICE || full;
 }
 
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+let messageTimer;
 
 function showMessage(text) {
+
     messageElement.textContent = text;
 
-    clearTimeout(showMessage.timer);
+    clearTimeout(messageTimer);
 
-    showMessage.timer = setTimeout(() => {
+    messageTimer = setTimeout(() => {
+
         messageElement.textContent = "";
-    }, 2200);
+
+    }, 1800);
 }
 
 
-function renderBoard(animationIndex = -1, animationType = "") {
+/* =====================================================
+   CRÉER UN SLIME
+===================================================== */
 
-    const slotElements = board.querySelectorAll(".slot");
+function createSlime(level, index) {
 
-    slotElements.forEach((slotElement, index) => {
+    const slime =
+        document.createElement("div");
 
-        slotElement.innerHTML = "";
+    slime.className =
+        `slime level-${level}`;
 
-        const slimeData = slots[index];
+    slime.dataset.index = index;
 
-        if (slimeData === null) {
-            slotElement.classList.add("empty");
-            return;
-        }
+    slime.innerHTML = `
 
-        slotElement.classList.remove("empty");
+        <div class="slime-content">
 
-        const slime = document.createElement("div");
-
-        slime.className =
-            `slime level-${slimeData.level}`;
-
-        if (animationIndex === index) {
-            slime.classList.add(
-                animationType === "merge"
-                    ? "merge-animation"
-                    : "buy-animation"
-            );
-        }
-
-        slime.draggable = true;
-
-        slime.innerHTML = `
-            <div class="slime-content">
-                <div class="slime-icon">
-                    ${LEVEL_ICONS[slimeData.level - 1]}
-                </div>
-
-                <div class="level">
-                    Niveau ${slimeData.level}
-                </div>
-
-                <div class="level-name">
-                    ${LEVEL_NAMES[slimeData.level - 1]}
-                </div>
+            <div class="slime-icon">
+                ${LEVEL_ICONS[level - 1]}
             </div>
-        `;
 
-        slime.addEventListener("dragstart", event => {
+            <div class="level">
+                Niveau ${level}
+            </div>
 
-            draggedIndex = index;
+            <div class="level-name">
+                ${LEVEL_NAMES[level - 1]}
+            </div>
 
-            event.dataTransfer.effectAllowed = "move";
+        </div>
+    `;
 
-            setTimeout(() => {
-                slime.style.opacity = ".35";
-            }, 0);
-        });
+    /*
+        IMPORTANT :
+        pointer-events est géré sur le slime
+        pour permettre le tactile.
+    */
 
-        slime.addEventListener("dragend", () => {
+    slime.addEventListener(
+        "pointerdown",
+        startDrag
+    );
 
-            slime.style.opacity = "1";
+    return slime;
+}
 
-            draggedIndex = null;
 
-            slotElements.forEach(slot => {
-                slot.classList.remove("drag-over");
-            });
-        });
+/* =====================================================
+   AFFICHER LE PLATEAU
+===================================================== */
 
-        slotElement.appendChild(slime);
-    });
+function renderBoard(animationIndex = -1) {
+
+    const slotElements =
+        board.querySelectorAll(".slot");
+
+    slotElements.forEach(
+        (slotElement, index) => {
+
+            slotElement.innerHTML = "";
+
+            const data = slots[index];
+
+            if (!data) {
+
+                slotElement.classList.add("empty");
+
+                return;
+            }
+
+            slotElement.classList.remove("empty");
+
+            const slime =
+                createSlime(
+                    data.level,
+                    index
+                );
+
+            if (animationIndex === index) {
+
+                slime.classList.add("appear");
+            }
+
+            slotElement.appendChild(slime);
+        }
+    );
 
     updateMoney();
 }
 
 
-/* =========================
-   DRAG & DROP
-========================= */
+/* =====================================================
+   POSITION DU DOIGT
+===================================================== */
 
-function setupDragAndDrop() {
+function moveClone(x, y) {
 
-    const slotElements = board.querySelectorAll(".slot");
+    if (!drag.clone) return;
 
-    slotElements.forEach((slot, targetIndex) => {
-
-        slot.addEventListener("dragover", event => {
-
-            event.preventDefault();
-
-            if (draggedIndex === null ||
-                draggedIndex === targetIndex) {
-                return;
-            }
-
-            slot.classList.add("drag-over");
-        });
-
-        slot.addEventListener("dragleave", () => {
-            slot.classList.remove("drag-over");
-        });
-
-        slot.addEventListener("drop", event => {
-
-            event.preventDefault();
-
-            slot.classList.remove("drag-over");
-
-            if (draggedIndex === null) return;
-            if (draggedIndex === targetIndex) return;
-
-            moveOrMerge(
-                draggedIndex,
-                targetIndex
-            );
-
-            draggedIndex = null;
-        });
-    });
+    drag.clone.style.left = x + "px";
+    drag.clone.style.top = y + "px";
 }
 
 
-/* =========================
+/* =====================================================
+   TROUVER LA CASE SOUS LE DOIGT
+===================================================== */
+
+function getSlotAtPoint(x, y) {
+
+    const elements =
+        document.elementsFromPoint(x, y);
+
+    for (const element of elements) {
+
+        const slot =
+            element.closest(".slot");
+
+        if (slot && board.contains(slot)) {
+
+            return Number(
+                slot.dataset.index
+            );
+        }
+    }
+
+    return null;
+}
+
+
+/* =====================================================
+   COMMENCER À DÉPLACER
+===================================================== */
+
+function startDrag(event) {
+
+    /*
+        Uniquement tactile / stylet.
+    */
+
+    if (
+        event.pointerType !== "touch" &&
+        event.pointerType !== "pen"
+    ) {
+        return;
+    }
+
+    const slime =
+        event.currentTarget;
+
+    const index =
+        Number(slime.dataset.index);
+
+    if (!slots[index]) return;
+
+    event.preventDefault();
+
+    /*
+        Évite que le navigateur interprète
+        le geste comme un scroll / zoom.
+    */
+
+    slime.setPointerCapture(
+        event.pointerId
+    );
+
+    const rect =
+        slime.getBoundingClientRect();
+
+    drag.active = true;
+    drag.index = index;
+    drag.pointerId = event.pointerId;
+
+    drag.offsetX =
+        event.clientX -
+        (rect.left + rect.width / 2);
+
+    drag.offsetY =
+        event.clientY -
+        (rect.top + rect.height / 2);
+
+    /*
+        On cache légèrement le slime original.
+    */
+
+    slime.style.opacity = ".22";
+
+    slime.classList.add("dragging");
+
+    /*
+        Création du clone qui suit le doigt.
+    */
+
+    const clone =
+        document.createElement("div");
+
+    clone.className =
+        "drag-clone";
+
+    const cloneSlime =
+        createSlime(
+            slots[index].level,
+            index
+        );
+
+    cloneSlime.style.pointerEvents =
+        "none";
+
+    clone.appendChild(cloneSlime);
+
+    document.body.appendChild(clone);
+
+    drag.clone = clone;
+
+    moveClone(
+        event.clientX,
+        event.clientY
+    );
+
+    clearTargets();
+}
+
+
+/* =====================================================
+   DÉPLACEMENT DU DOIGT
+===================================================== */
+
+document.addEventListener(
+    "pointermove",
+    event => {
+
+        if (!drag.active) return;
+
+        if (
+            event.pointerId !==
+            drag.pointerId
+        ) {
+            return;
+        }
+
+        event.preventDefault();
+
+        moveClone(
+            event.clientX,
+            event.clientY
+        );
+
+        updateTarget(
+            event.clientX,
+            event.clientY
+        );
+    },
+    { passive: false }
+);
+
+
+/* =====================================================
+   CIBLE
+===================================================== */
+
+function updateTarget(x, y) {
+
+    clearTargets();
+
+    const target =
+        getSlotAtPoint(x, y);
+
+    drag.currentTarget =
+        target;
+
+    if (
+        target === null ||
+        target === drag.index
+    ) {
+        return;
+    }
+
+    const slot =
+        board.querySelector(
+            `.slot[data-index="${target}"]`
+        );
+
+    if (!slot) return;
+
+    /*
+        Même niveau :
+        cible de fusion.
+    */
+
+    if (
+        slots[target] &&
+        slots[target].level ===
+        slots[drag.index].level &&
+        slots[target].level < MAX_LEVEL
+    ) {
+
+        slot.classList.add(
+            "target-merge"
+        );
+
+    } else {
+
+        slot.classList.add(
+            "target"
+        );
+    }
+}
+
+
+/* =====================================================
+   EFFACER LES CIBLES
+===================================================== */
+
+function clearTargets() {
+
+    board
+        .querySelectorAll(".slot")
+        .forEach(slot => {
+
+            slot.classList.remove(
+                "target",
+                "target-merge"
+            );
+        });
+}
+
+
+/* =====================================================
+   RELÂCHER LE DOIGT
+===================================================== */
+
+document.addEventListener(
+    "pointerup",
+    finishDrag
+);
+
+document.addEventListener(
+    "pointercancel",
+    finishDrag
+);
+
+
+function finishDrag(event) {
+
+    if (!drag.active) return;
+
+    if (
+        event.pointerId !==
+        drag.pointerId
+    ) {
+        return;
+    }
+
+    event.preventDefault();
+
+    const from =
+        drag.index;
+
+    const to =
+        getSlotAtPoint(
+            event.clientX,
+            event.clientY
+        );
+
+    const draggedSlime =
+        board.querySelector(
+            `.slot[data-index="${from}"] .slime`
+        );
+
+    if (draggedSlime) {
+
+        draggedSlime.style.opacity = "1";
+    }
+
+    /*
+        Supprime le clone.
+    */
+
+    if (drag.clone) {
+
+        drag.clone.remove();
+
+        drag.clone = null;
+    }
+
+    clearTargets();
+
+    drag.active = false;
+    drag.index = null;
+    drag.pointerId = null;
+    drag.currentTarget = null;
+
+    /*
+        Aucun déplacement valide.
+    */
+
+    if (
+        to === null ||
+        to === from
+    ) {
+
+        renderBoard();
+
+        return;
+    }
+
+    moveOrMerge(
+        from,
+        to,
+        event.clientX,
+        event.clientY
+    );
+}
+
+
+/* =====================================================
    DÉPLACEMENT / FUSION
-========================= */
+===================================================== */
 
-function moveOrMerge(from, to) {
+function moveOrMerge(
+    from,
+    to,
+    x,
+    y
+) {
 
-    const source = slots[from];
-    const target = slots[to];
+    const source =
+        slots[from];
+
+    const target =
+        slots[to];
 
     if (!source) return;
 
     /*
-        Case vide :
-        on déplace simplement le slime.
+        CASE VIDE
     */
+
     if (!target) {
 
         slots[to] = source;
         slots[from] = null;
 
-        renderBoard(to, "move");
+        renderBoard(to);
 
         return;
     }
 
     /*
-        Deux niveaux différents :
-        on échange les deux slimes.
+        NIVEAUX DIFFÉRENTS
+        => ÉCHANGE
     */
-    if (source.level !== target.level) {
+
+    if (
+        source.level !==
+        target.level
+    ) {
 
         slots[from] = target;
         slots[to] = source;
 
-        renderBoard(to, "move");
+        renderBoard(to);
 
         return;
     }
 
     /*
-        Même niveau :
-        FUSION
+        NIVEAU MAX
     */
 
-    if (source.level >= MAX_LEVEL) {
+    if (
+        source.level >=
+        MAX_LEVEL
+    ) {
 
         showMessage(
             "Niveau maximum atteint !"
         );
 
+        renderBoard();
+
         return;
     }
 
-    const newLevel = source.level + 1;
+    /*
+        FUSION
+    */
+
+    const newLevel =
+        source.level + 1;
 
     slots[to] = {
         level: newLevel
@@ -819,72 +1515,137 @@ function moveOrMerge(from, to) {
 
     slots[from] = null;
 
-    renderBoard(to, "merge");
+    /*
+        Récompense.
+    */
 
-    showMessage(
-        `Fusion réussie ! Niveau ${newLevel} 🎉`
-    );
+    money +=
+        newLevel * 3;
+
+    renderBoard(to);
 
     /*
-        Petite récompense lors d'une fusion.
+        Animation du slime créé.
     */
-    const reward = newLevel * 3;
 
-    money += reward;
+    requestAnimationFrame(() => {
 
-    updateMoney();
+        const newSlime =
+            board.querySelector(
+                `.slot[data-index="${to}"] .slime`
+            );
+
+        if (newSlime) {
+
+            newSlime.classList.remove(
+                "appear"
+            );
+
+            void newSlime.offsetWidth;
+
+            newSlime.classList.add(
+                "merge-pop"
+            );
+        }
+    });
+
+    /*
+        Flash de fusion
+        directement sous le doigt.
+    */
+
+    createMergeFlash(
+        x,
+        y
+    );
+
+    showMessage(
+        `Fusion ! Niveau ${newLevel} ✨`
+    );
 }
 
 
-/* =========================
-   ACHETER
-========================= */
+/* =====================================================
+   FLASH DE FUSION
+===================================================== */
 
-buyButton.addEventListener("click", () => {
+function createMergeFlash(x, y) {
 
-    if (money < BUY_PRICE) {
+    const flash =
+        document.createElement("div");
 
-        showMessage("Pas assez de pièces.");
+    flash.className =
+        "merge-flash";
 
-        return;
-    }
+    flash.style.left =
+        x + "px";
 
-    const emptyIndex =
-        slots.findIndex(slot => slot === null);
+    flash.style.top =
+        y + "px";
 
-    if (emptyIndex === -1) {
+    document.body.appendChild(flash);
+
+    setTimeout(() => {
+
+        flash.remove();
+
+    }, 600);
+}
+
+
+/* =====================================================
+   ACHAT
+===================================================== */
+
+buyButton.addEventListener(
+    "click",
+    () => {
+
+        if (money < BUY_PRICE) {
+
+            showMessage(
+                "Pas assez de pièces."
+            );
+
+            return;
+        }
+
+        const index =
+            slots.findIndex(
+                slot => slot === null
+            );
+
+        if (index === -1) {
+
+            showMessage(
+                "Les 9 cases sont pleines."
+            );
+
+            return;
+        }
+
+        money -= BUY_PRICE;
+
+        slots[index] = {
+            level: 1
+        };
+
+        renderBoard(index);
 
         showMessage(
-            "Les 9 cases sont déjà occupées."
+            "Nouveau slime !"
         );
-
-        return;
     }
-
-    money -= BUY_PRICE;
-
-    slots[emptyIndex] = {
-        level: 1
-    };
-
-    renderBoard(
-        emptyIndex,
-        "buy"
-    );
-
-    showMessage(
-        "Un nouveau slime apparaît !"
-    );
-});
+);
 
 
-/* =========================
+/* =====================================================
    SAUVEGARDE
-========================= */
+===================================================== */
 
 function createSave() {
 
-    const saveObject = {
+    const data = {
 
         version: 1,
 
@@ -895,19 +1656,18 @@ function createSave() {
         savedAt: Date.now()
     };
 
-    /*
-        JSON puis Base64.
-        Ça donne un code assez compact à
-        copier-coller.
-    */
-
-    const json = JSON.stringify(saveObject);
+    const json =
+        JSON.stringify(data);
 
     return btoa(
         encodeURIComponent(json)
     );
 }
 
+
+/* =====================================================
+   CHARGEMENT
+===================================================== */
 
 function loadSave(code) {
 
@@ -921,23 +1681,19 @@ function loadSave(code) {
         const data =
             JSON.parse(json);
 
-        if (!data ||
+        if (
+            !data ||
             !Array.isArray(data.slots) ||
-            data.slots.length !== 9) {
+            data.slots.length !== 9 ||
+            typeof data.money !== "number"
+        ) {
 
-            throw new Error("Sauvegarde invalide");
+            throw new Error();
         }
 
-        if (typeof data.money !== "number") {
-
-            throw new Error("Sauvegarde invalide");
-        }
-
-        /*
-            Vérification des niveaux.
-        */
-
-        for (const slot of data.slots) {
+        for (
+            const slot of data.slots
+        ) {
 
             if (slot !== null) {
 
@@ -946,128 +1702,146 @@ function loadSave(code) {
                     slot.level < 1 ||
                     slot.level > MAX_LEVEL
                 ) {
-                    throw new Error(
-                        "Niveau invalide"
-                    );
+
+                    throw new Error();
                 }
             }
         }
 
-        money = Math.max(
-            0,
-            Math.floor(data.money)
-        );
+        money =
+            Math.max(
+                0,
+                Math.floor(data.money)
+            );
 
-        slots = data.slots;
+        slots =
+            data.slots;
 
         renderBoard();
 
         return true;
 
-    } catch (error) {
+    } catch {
 
         return false;
     }
 }
 
 
-/* =========================
-   BOUTON EXPORT
-========================= */
+/* =====================================================
+   EXPORT
+===================================================== */
 
 document
     .getElementById("exportButton")
-    .addEventListener("click", async () => {
+    .addEventListener(
+        "click",
+        async () => {
 
-        const code = createSave();
+            const code =
+                createSave();
 
-        saveArea.value = code;
+            saveArea.value =
+                code;
 
-        /*
-            Tentative de copie automatique.
-        */
-
-        try {
-
-            await navigator.clipboard.writeText(code);
-
-            showMessage(
-                "Sauvegarde copiée !"
-            );
-
-        } catch {
+            saveArea.focus();
 
             saveArea.select();
 
-            showMessage(
-                "Code généré. Copie-le manuellement."
-            );
+            try {
+
+                await navigator.clipboard
+                    .writeText(code);
+
+                showMessage(
+                    "Sauvegarde copiée !"
+                );
+
+            } catch {
+
+                showMessage(
+                    "Code prêt à copier."
+                );
+            }
         }
-    });
+    );
 
 
-/* =========================
-   BOUTON IMPORT
-========================= */
+/* =====================================================
+   IMPORT
+===================================================== */
 
 document
     .getElementById("importButton")
-    .addEventListener("click", () => {
+    .addEventListener(
+        "click",
+        () => {
 
-        const code = saveArea.value.trim();
+            const code =
+                saveArea.value.trim();
 
-        if (!code) {
+            if (!code) {
 
-            showMessage(
-                "Colle d'abord une sauvegarde."
-            );
+                showMessage(
+                    "Colle une sauvegarde."
+                );
 
-            return;
+                return;
+            }
+
+            if (loadSave(code)) {
+
+                showMessage(
+                    "Sauvegarde chargée !"
+                );
+
+            } else {
+
+                showMessage(
+                    "Sauvegarde invalide."
+                );
+            }
         }
-
-        if (loadSave(code)) {
-
-            showMessage(
-                "Sauvegarde chargée !"
-            );
-
-        } else {
-
-            showMessage(
-                "Cette sauvegarde est invalide."
-            );
-        }
-    });
-
-
-/* =========================
-   SAUVEGARDE AUTOMATIQUE
-========================= */
-
-setInterval(() => {
-
-    localStorage.setItem(
-        "slimeMergeAutoSave",
-        createSave()
     );
 
-}, 3000);
+
+/* =====================================================
+   SAUVEGARDE AUTOMATIQUE
+===================================================== */
+
+setInterval(
+    () => {
+
+        try {
+
+            localStorage.setItem(
+                "slimeMergeAutoSave",
+                createSave()
+            );
+
+        } catch {}
+    },
+    3000
+);
 
 
-/* =========================
-   CHARGEMENT AUTOMATIQUE
-========================= */
+/* =====================================================
+   CHARGEMENT AUTO
+===================================================== */
 
 function loadAutomaticSave() {
 
-    const saved =
-        localStorage.getItem(
-            "slimeMergeAutoSave"
-        );
+    try {
 
-    if (saved) {
+        const saved =
+            localStorage.getItem(
+                "slimeMergeAutoSave"
+            );
 
-        if (loadSave(saved)) {
+        if (
+            saved &&
+            loadSave(saved)
+        ) {
 
             showMessage(
                 "Sauvegarde automatique chargée."
@@ -1075,17 +1849,65 @@ function loadAutomaticSave() {
 
             return;
         }
-    }
+
+    } catch {}
 
     renderBoard();
 }
 
 
-/* =========================
-   DÉMARRAGE
-========================= */
+/* =====================================================
+   EMPÊCHER LES GESTES TACTILES INDÉSIRABLES
+===================================================== */
 
-setupDragAndDrop();
+document.addEventListener(
+    "gesturestart",
+    event => {
+        event.preventDefault();
+    },
+    { passive: false }
+);
+
+document.addEventListener(
+    "gesturechange",
+    event => {
+        event.preventDefault();
+    },
+    { passive: false }
+);
+
+document.addEventListener(
+    "gestureend",
+    event => {
+        event.preventDefault();
+    },
+    { passive: false }
+);
+
+
+/*
+    Empêche le menu contextuel sur les slimes.
+*/
+
+document.addEventListener(
+    "contextmenu",
+    event => {
+
+        if (
+            event.target.closest(".slime")
+        ) {
+
+            event.preventDefault();
+        }
+    }
+);
+
+
+/* =====================================================
+   DÉMARRAGE
+===================================================== */
+
+renderBoard();
 
 loadAutomaticSave();
 
@@ -1093,3 +1915,4 @@ loadAutomaticSave();
 
 </body>
 </html>
+```
