@@ -660,7 +660,7 @@ body {
 
 
 /* =========================================================
-   SAUVEGARDE — FIXÉE À GAUCHE
+   SAUVEGARDE — BOX VERTICALE À GAUCHE
 ========================================================= */
 
 .save-panel {
@@ -672,33 +672,45 @@ body {
 
     transform: translateY(-50%);
 
-    width: 190px;
+    width: 145px;
 
-    margin: 0;
+    padding: 13px 11px;
 
-    padding: 9px 10px;
-
-    border-radius: 15px;
+    border-radius: 18px;
 
     background:
-        rgba(18,24,20,.9);
+        linear-gradient(
+            145deg,
+            rgba(31,42,35,.97),
+            rgba(13,18,15,.97)
+        );
 
     border:
         1px solid
-        rgba(255,255,255,.06);
+        rgba(190,255,190,.12);
+
+    box-shadow:
+        0 15px 35px rgba(0,0,0,.45),
+        inset 0 1px rgba(255,255,255,.06);
 
     z-index: 100;
+
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
 }
 
 .save-title {
 
-    color: #b5c1b9;
+    color: #d5e4d9;
 
-    font-size: 10px;
+    font-size: 11px;
 
-    font-weight: 900;
+    font-weight: 950;
 
-    margin-bottom: 5px;
+    text-align: center;
+
+    margin-bottom: 2px;
 }
 
 .save-area {
@@ -707,26 +719,26 @@ body {
 
     width: 100%;
 
-    height: 38px;
+    height: 74px;
 
-    padding: 6px;
+    padding: 7px;
 
     resize: none;
 
     border:
         1px solid #303a34;
 
-    border-radius: 8px;
+    border-radius: 9px;
 
     outline: none;
 
-    background: #0a0e0b;
+    background: #080c09;
 
     color: #9aa79f;
 
     font-family: monospace;
 
-    font-size: 8px;
+    font-size: 7px;
 
     user-select: text;
     -webkit-user-select: text;
@@ -738,33 +750,54 @@ body {
 
     display: flex;
 
-    gap: 7px;
+    flex-direction: column;
 
-    margin-top: 6px;
+    gap: 6px;
+
+    margin-top: 1px;
 }
 
 .save-buttons button {
 
-    flex: 1;
+    width: 100%;
 
-    min-height: 32px;
+    min-height: 34px;
+
+    padding: 5px 6px;
 
     border:
-        1px solid #303a34;
+        1px solid #354238;
 
     border-radius: 9px;
 
     background:
-        #252e28;
+        linear-gradient(
+            145deg,
+            #29352d,
+            #202922
+        );
 
     color:
-        #c6d0c9;
+        #d0dbd3;
 
-    font-size: 10px;
+    font-size: 9px;
 
-    font-weight: 850;
+    font-weight: 900;
 
     touch-action: manipulation;
+
+    transition:
+        transform .08s ease,
+        background .08s ease;
+}
+
+.save-buttons button:active {
+
+    transform:
+        scale(.96);
+
+    background:
+        #344238;
 }
 
 .appear {
@@ -911,7 +944,15 @@ body {
     }
 
     .save-panel {
-        margin: 0;
+        padding: 10px 9px;
+    }
+
+    .save-area {
+        height: 60px;
+    }
+
+    .save-buttons button {
+        min-height: 30px;
     }
 }
 
@@ -922,7 +963,7 @@ body {
     }
 
     .save-area {
-        height: 31px;
+        height: 48px;
     }
 
     .save-buttons button {
@@ -969,50 +1010,15 @@ body {
         id="board"
     >
 
-        <div
-            class="slot empty"
-            data-index="0"
-        ></div>
-
-        <div
-            class="slot empty"
-            data-index="1"
-        ></div>
-
-        <div
-            class="slot empty"
-            data-index="2"
-        ></div>
-
-        <div
-            class="slot empty"
-            data-index="3"
-        ></div>
-
-        <div
-            class="slot empty"
-            data-index="4"
-        ></div>
-
-        <div
-            class="slot empty"
-            data-index="5"
-        ></div>
-
-        <div
-            class="slot empty"
-            data-index="6"
-        ></div>
-
-        <div
-            class="slot empty"
-            data-index="7"
-        ></div>
-
-        <div
-            class="slot empty"
-            data-index="8"
-        ></div>
+        <div class="slot empty" data-index="0"></div>
+        <div class="slot empty" data-index="1"></div>
+        <div class="slot empty" data-index="2"></div>
+        <div class="slot empty" data-index="3"></div>
+        <div class="slot empty" data-index="4"></div>
+        <div class="slot empty" data-index="5"></div>
+        <div class="slot empty" data-index="6"></div>
+        <div class="slot empty" data-index="7"></div>
+        <div class="slot empty" data-index="8"></div>
 
     </div>
 
@@ -1042,17 +1048,24 @@ body {
         <textarea
             id="saveArea"
             class="save-area"
-            placeholder="Ton code de sauvegarde..."
+            placeholder="Code..."
             spellcheck="false"
         ></textarea>
 
         <div class="save-buttons">
 
             <button
-                id="exportButton"
+                id="copyButton"
                 type="button"
             >
-                Copier la sauvegarde
+                Copier
+            </button>
+
+            <button
+                id="pasteButton"
+                type="button"
+            >
+                Coller
             </button>
 
             <button
@@ -1254,11 +1267,6 @@ function updateBuyButton() {
             slot => slot !== null
         );
 }
-
-
-/* =========================================================
-   BOUTON RAPIDE — MODIFICATION
-========================================================= */
 
 buyButton.addEventListener(
     "pointerdown",
@@ -1853,8 +1861,13 @@ function loadSave(
     }
 }
 
+
+/* =========================================================
+   COPIER DIRECTEMENT
+========================================================= */
+
 document
-    .getElementById("exportButton")
+    .getElementById("copyButton")
     .addEventListener(
         "click",
         async () => {
@@ -1877,18 +1890,64 @@ document
 
             } catch {
 
-                saveArea.focus();
-
-                saveArea.select();
-
                 showMessage(
-                    "Code prêt à copier."
+                    "Impossible de copier."
                 );
 
             }
 
         }
     );
+
+
+/* =========================================================
+   COLLER DIRECTEMENT
+========================================================= */
+
+document
+    .getElementById("pasteButton")
+    .addEventListener(
+        "click",
+        async () => {
+
+            try {
+
+                const text =
+                    await navigator
+                        .clipboard
+                        .readText();
+
+                if (!text) {
+
+                    showMessage(
+                        "Presse-papiers vide."
+                    );
+
+                    return;
+                }
+
+                saveArea.value =
+                    text.trim();
+
+                showMessage(
+                    "Sauvegarde collée !"
+                );
+
+            } catch {
+
+                showMessage(
+                    "Impossible de lire le presse-papiers."
+                );
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   CHARGER
+========================================================= */
 
 document
     .getElementById("importButton")
@@ -1902,7 +1961,7 @@ document
             if (!code) {
 
                 showMessage(
-                    "Colle une sauvegarde."
+                    "Aucune sauvegarde."
                 );
 
                 return;
@@ -1926,6 +1985,11 @@ document
 
         }
     );
+
+
+/* =========================================================
+   SAUVEGARDE AUTOMATIQUE
+========================================================= */
 
 setInterval(
     () => {
@@ -1964,6 +2028,11 @@ function loadAutomaticSave() {
 
     renderBoard();
 }
+
+
+/* =========================================================
+   EMPÊCHER LE ZOOM
+========================================================= */
 
 document.addEventListener(
     "gesturestart",
