@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slime Merge</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    user-select: none;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    background:
+        radial-gradient(circle at 50% 0%, #263b36 0%, #111713 45%, #090c0a 100%);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+.game {
+    width: min(94vw, 650px);
+    padding: 25px 0 35px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 22px;
+}
+
+.title {
+    font-size: 42px;
+    font-weight: 900;
+    letter-spacing: -2px;
+    margin: 0;
+    text-shadow:
+        0 3px 0 #07100b,
+        0 0 25px rgba(102, 255, 176, 0.18);
+}
+
+.subtitle {
+    margin-top: 5px;
+    color: #91a39a;
+    font-size: 14px;
+}
+
+.money-box {
+    margin: 22px auto;
+    width: fit-content;
+    min-width: 180px;
+    padding: 10px 24px;
+    border-radius: 18px;
+    background: rgba(24, 31, 27, .9);
+    border: 1px solid rgba(255,255,255,.08);
+    box-shadow:
+        0 12px 35px rgba(0,0,0,.35),
+        inset 0 1px rgba(255,255,255,.05);
+}
+
+.money-label {
+    color: #8f9d96;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.money {
+    margin-top: 2px;
+    color: #d9ff72;
+    font-size: 27px;
+    font-weight: 900;
+}
+
+.board {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 13px;
+    padding: 15px;
+    border-radius: 28px;
+
+    background:
+        linear-gradient(145deg, #242d28, #161c18);
+
+    border: 1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+        0 25px 60px rgba(0,0,0,.55),
+        inset 0 1px rgba(255,255,255,.06);
+}
+
+.slot {
+    aspect-ratio: 1;
+    min-height: 130px;
+    border-radius: 22px;
+
+    background:
+        radial-gradient(circle at 50% 35%, rgba(255,255,255,.035), transparent 55%),
+        #111713;
+
+    border: 2px solid #202a24;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+    transition:
+        transform .15s ease,
+        border-color .15s ease,
+        background .15s ease;
+
+    box-shadow:
+        inset 0 4px 10px rgba(0,0,0,.25),
+        inset 0 -5px 12px rgba(0,0,0,.2);
+}
+
+.slot.drag-over {
+    transform: scale(.97);
+    border-color: #9fff69;
+    background: #172219;
+}
+
+.slot.empty::after {
+    content: "+";
+    position: absolute;
+    color: #28332d;
+    font-size: 32px;
+    font-weight: 300;
+}
+
+.slime {
+    width: 76%;
+    height: 76%;
+    position: relative;
+    cursor: grab;
+
+    border-radius:
+        48% 52% 45% 55% /
+        55% 48% 52% 45%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transform: translateY(2px);
+
+    box-shadow:
+        inset 8px 10px 12px rgba(255,255,255,.28),
+        inset -10px -13px 15px rgba(0,0,0,.25),
+        0 9px 14px rgba(0,0,0,.45);
+
+    transition: transform .15s ease, filter .15s ease;
+}
+
+.slime:hover {
+    transform: translateY(-3px) scale(1.04);
+    filter: brightness(1.08);
+}
+
+.slime:active {
+    cursor: grabbing;
+    transform: scale(.94);
+}
+
+.slime::before {
+    content: "";
+    position: absolute;
+    width: 38%;
+    height: 21%;
+    left: 17%;
+    top: 14%;
+    border-radius: 50%;
+    background: rgba(255,255,255,.7);
+    transform: rotate(-25deg);
+    filter: blur(1px);
+}
+
+.slime::after {
+    content: "";
+    position: absolute;
+    width: 13%;
+    height: 8%;
+    left: 32%;
+    top: 36%;
+    border-radius: 50%;
+    background: rgba(255,255,255,.35);
+}
+
+.slime-content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    text-shadow:
+        0 2px 3px rgba(0,0,0,.45);
+}
+
+.slime-icon {
+    font-size: 31px;
+    line-height: 1;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,.25));
+}
+
+.level {
+    margin-top: 4px;
+    font-size: 16px;
+    font-weight: 900;
+}
+
+.level-name {
+    margin-top: 1px;
+    font-size: 10px;
+    font-weight: bold;
+    opacity: .85;
+}
+
+/* Couleurs des niveaux */
+
+.level-1 {
+    background:
+        radial-gradient(circle at 35% 25%, #d7ff91, transparent 20%),
+        linear-gradient(145deg, #9be45b, #54a833);
+}
+
+.level-2 {
+    background:
+        radial-gradient(circle at 35% 25%, #baffff, transparent 20%),
+        linear-gradient(145deg, #55e4db, #218f9a);
+}
+
+.level-3 {
+    background:
+        radial-gradient(circle at 35% 25%, #e1a9ff, transparent 20%),
+        linear-gradient(145deg, #bd69ed, #7137a7);
+}
+
+.level-4 {
+    background:
+        radial-gradient(circle at 35% 25%, #ffe4a2, transparent 20%),
+        linear-gradient(145deg, #ffbd4a, #d46a20);
+}
+
+.level-5 {
+    background:
+        radial-gradient(circle at 35% 25%, #ffb2c5, transparent 20%),
+        linear-gradient(145deg, #ff668d, #b52f62);
+}
+
+.level-6 {
+    background:
+        radial-gradient(circle at 35% 25%, #d8c6ff, transparent 20%),
+        linear-gradient(145deg, #7d72ff, #4238b4);
+}
+
+.level-7 {
+    background:
+        radial-gradient(circle at 35% 25%, #fff7a7, transparent 20%),
+        linear-gradient(145deg, #f5e85b, #bda51c);
+}
+
+.level-8 {
+    background:
+        radial-gradient(circle at 35% 25%, #ffffff, transparent 20%),
+        linear-gradient(145deg, #8bffd0, #22a979);
+}
+
+.level-9 {
+    background:
+        radial-gradient(circle at 35% 25%, #ffffff, transparent 20%),
+        linear-gradient(145deg, #f7f7ff, #9494c9);
+}
+
+.level-10 {
+    background:
+        radial-gradient(circle at 35% 25%, #ffffff, transparent 20%),
+        linear-gradient(145deg, #fff, #9de6ff);
+    box-shadow:
+        inset 8px 10px 12px rgba(255,255,255,.5),
+        inset -10px -13px 15px rgba(0,0,0,.15),
+        0 0 25px rgba(143, 226, 255, .65);
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+button {
+    border: 0;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 900;
+}
+
+.buy {
+    padding: 15px 32px;
+    border-radius: 17px;
+    color: #17200e;
+    font-size: 17px;
+
+    background: linear-gradient(145deg, #caff69, #82c83e);
+
+    box-shadow:
+        0 7px 0 #4e7926,
+        0 12px 25px rgba(117, 198, 62, .2);
+
+    transition: transform .1s ease, box-shadow .1s ease;
+}
+
+.buy:hover {
+    transform: translateY(-2px);
+}
+
+.buy:active {
+    transform: translateY(5px);
+    box-shadow:
+        0 2px 0 #4e7926,
+        0 5px 15px rgba(117, 198, 62, .15);
+}
+
+.buy:disabled {
+    cursor: not-allowed;
+    opacity: .45;
+    transform: none;
+    box-shadow: 0 4px 0 #354127;
+}
+
+.secondary {
+    padding: 13px 17px;
+    border-radius: 15px;
+    color: #c4cec8;
+    background: #202822;
+    border: 1px solid #303b34;
+}
+
+.secondary:hover {
+    background: #28322c;
+}
+
+.info {
+    margin-top: 18px;
+    text-align: center;
+    color: #7f8b84;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.message {
+    min-height: 20px;
+    margin-top: 9px;
+    text-align: center;
+    color: #b9d5c4;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.save-panel {
+    margin-top: 22px;
+    padding: 18px;
+    border-radius: 20px;
+    background: rgba(20,26,22,.8);
+    border: 1px solid rgba(255,255,255,.06);
+}
+
+.save-title {
+    font-weight: 900;
+    margin-bottom: 10px;
+}
+
+.save-area {
+    width: 100%;
+    min-height: 75px;
+    resize: vertical;
+
+    border: 1px solid #303a34;
+    border-radius: 12px;
+
+    background: #0c100d;
+    color: #aebbb3;
+
+    padding: 10px;
+    font-family: monospace;
+    font-size: 11px;
+
+    outline: none;
+}
+
+.save-area:focus {
+    border-color: #75a75d;
+}
+
+.save-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 9px;
+}
+
+.save-buttons button {
+    flex: 1;
+    padding: 10px;
+    border-radius: 11px;
+    color: #c8d3cc;
+    background: #252e28;
+    border: 1px solid #333d37;
+}
+
+.save-buttons button:hover {
+    background: #2e3932;
+}
+
+.merge-animation {
+    animation: merge .4s ease;
+}
+
+.buy-animation {
+    animation: appear .35s ease;
+}
+
+@keyframes merge {
+    0% {
+        transform: scale(.7);
+        opacity: .4;
+    }
+    45% {
+        transform: scale(1.15);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes appear {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    70% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 520px) {
+    .game {
+        width: 95vw;
+    }
+
+    .title {
+        font-size: 34px;
+    }
+
+    .slot {
+        min-height: 95px;
+    }
+
+    .slime-icon {
+        font-size: 24px;
+    }
+
+    .level {
+        font-size: 13px;
+    }
+
+    .level-name {
+        font-size: 8px;
+    }
+
+    .controls {
+        flex-wrap: wrap;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="game">
+
+    <div class="header">
+        <h1 class="title">Slime Merge</h1>
+        <div class="subtitle">
+            Fusionne les slimes pour créer des niveaux toujours plus élevés
+        </div>
+    </div>
+
+    <div class="money-box">
+        <div class="money-label">Pièces</div>
+        <div class="money" id="money">100</div>
+    </div>
+
+    <div class="board" id="board">
+        <div class="slot empty" data-index="0"></div>
+        <div class="slot empty" data-index="1"></div>
+        <div class="slot empty" data-index="2"></div>
+        <div class="slot empty" data-index="3"></div>
+        <div class="slot empty" data-index="4"></div>
+        <div class="slot empty" data-index="5"></div>
+        <div class="slot empty" data-index="6"></div>
+        <div class="slot empty" data-index="7"></div>
+        <div class="slot empty" data-index="8"></div>
+    </div>
+
+    <div class="message" id="message"></div>
+
+    <div class="controls">
+        <button class="buy" id="buyButton">
+            Acheter · 10 🪙
+        </button>
+    </div>
+
+    <div class="info">
+        Glisse un slime sur un autre slime du même niveau pour les fusionner.
+    </div>
+
+    <div class="save-panel">
+
+        <div class="save-title">
+            Sauvegarde
+        </div>
+
+        <textarea
+            class="save-area"
+            id="saveArea"
+            placeholder="Ton code de sauvegarde apparaîtra ici..."
+            spellcheck="false"
+        ></textarea>
+
+        <div class="save-buttons">
+            <button id="exportButton">Exporter</button>
+            <button id="importButton">Importer</button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+/* =========================
+   CONFIGURATION
+========================= */
+
+const MAX_LEVEL = 10;
+const BUY_PRICE = 10;
+
+/*
+    Les noms peuvent facilement être changés.
+*/
+const LEVEL_NAMES = [
+    "Petit slime",
+    "Slime bleu",
+    "Slime magique",
+    "Slime doré",
+    "Slime rose",
+    "Slime royal",
+    "Slime solaire",
+    "Slime céleste",
+    "Slime légendaire",
+    "Slime ultime"
+];
+
+const LEVEL_ICONS = [
+    "🫧",
+    "💧",
+    "🔮",
+    "✨",
+    "💗",
+    "👑",
+    "☀️",
+    "🌙",
+    "💎",
+    "🌟"
+];
+
+
+/* =========================
+   ÉTAT DU JEU
+========================= */
+
+let money = 100;
+
+let slots = [
+    null, null, null,
+    null, null, null,
+    null, null, null
+];
+
+let draggedIndex = null;
+
+
+/* =========================
+   DOM
+========================= */
+
+const board = document.getElementById("board");
+const moneyElement = document.getElementById("money");
+const buyButton = document.getElementById("buyButton");
+const messageElement = document.getElementById("message");
+const saveArea = document.getElementById("saveArea");
+
+
+/* =========================
+   AFFICHAGE
+========================= */
+
+function updateMoney() {
+    moneyElement.textContent = money.toLocaleString("fr-FR");
+
+    buyButton.disabled =
+        money < BUY_PRICE ||
+        slots.every(slot => slot !== null);
+}
+
+
+function showMessage(text) {
+    messageElement.textContent = text;
+
+    clearTimeout(showMessage.timer);
+
+    showMessage.timer = setTimeout(() => {
+        messageElement.textContent = "";
+    }, 2200);
+}
+
+
+function renderBoard(animationIndex = -1, animationType = "") {
+
+    const slotElements = board.querySelectorAll(".slot");
+
+    slotElements.forEach((slotElement, index) => {
+
+        slotElement.innerHTML = "";
+
+        const slimeData = slots[index];
+
+        if (slimeData === null) {
+            slotElement.classList.add("empty");
+            return;
+        }
+
+        slotElement.classList.remove("empty");
+
+        const slime = document.createElement("div");
+
+        slime.className =
+            `slime level-${slimeData.level}`;
+
+        if (animationIndex === index) {
+            slime.classList.add(
+                animationType === "merge"
+                    ? "merge-animation"
+                    : "buy-animation"
+            );
+        }
+
+        slime.draggable = true;
+
+        slime.innerHTML = `
+            <div class="slime-content">
+                <div class="slime-icon">
+                    ${LEVEL_ICONS[slimeData.level - 1]}
+                </div>
+
+                <div class="level">
+                    Niveau ${slimeData.level}
+                </div>
+
+                <div class="level-name">
+                    ${LEVEL_NAMES[slimeData.level - 1]}
+                </div>
+            </div>
+        `;
+
+        slime.addEventListener("dragstart", event => {
+
+            draggedIndex = index;
+
+            event.dataTransfer.effectAllowed = "move";
+
+            setTimeout(() => {
+                slime.style.opacity = ".35";
+            }, 0);
+        });
+
+        slime.addEventListener("dragend", () => {
+
+            slime.style.opacity = "1";
+
+            draggedIndex = null;
+
+            slotElements.forEach(slot => {
+                slot.classList.remove("drag-over");
+            });
+        });
+
+        slotElement.appendChild(slime);
+    });
+
+    updateMoney();
+}
+
+
+/* =========================
+   DRAG & DROP
+========================= */
+
+function setupDragAndDrop() {
+
+    const slotElements = board.querySelectorAll(".slot");
+
+    slotElements.forEach((slot, targetIndex) => {
+
+        slot.addEventListener("dragover", event => {
+
+            event.preventDefault();
+
+            if (draggedIndex === null ||
+                draggedIndex === targetIndex) {
+                return;
+            }
+
+            slot.classList.add("drag-over");
+        });
+
+        slot.addEventListener("dragleave", () => {
+            slot.classList.remove("drag-over");
+        });
+
+        slot.addEventListener("drop", event => {
+
+            event.preventDefault();
+
+            slot.classList.remove("drag-over");
+
+            if (draggedIndex === null) return;
+            if (draggedIndex === targetIndex) return;
+
+            moveOrMerge(
+                draggedIndex,
+                targetIndex
+            );
+
+            draggedIndex = null;
+        });
+    });
+}
+
+
+/* =========================
+   DÉPLACEMENT / FUSION
+========================= */
+
+function moveOrMerge(from, to) {
+
+    const source = slots[from];
+    const target = slots[to];
+
+    if (!source) return;
+
+    /*
+        Case vide :
+        on déplace simplement le slime.
+    */
+    if (!target) {
+
+        slots[to] = source;
+        slots[from] = null;
+
+        renderBoard(to, "move");
+
+        return;
+    }
+
+    /*
+        Deux niveaux différents :
+        on échange les deux slimes.
+    */
+    if (source.level !== target.level) {
+
+        slots[from] = target;
+        slots[to] = source;
+
+        renderBoard(to, "move");
+
+        return;
+    }
+
+    /*
+        Même niveau :
+        FUSION
+    */
+
+    if (source.level >= MAX_LEVEL) {
+
+        showMessage(
+            "Niveau maximum atteint !"
+        );
+
+        return;
+    }
+
+    const newLevel = source.level + 1;
+
+    slots[to] = {
+        level: newLevel
+    };
+
+    slots[from] = null;
+
+    renderBoard(to, "merge");
+
+    showMessage(
+        `Fusion réussie ! Niveau ${newLevel} 🎉`
+    );
+
+    /*
+        Petite récompense lors d'une fusion.
+    */
+    const reward = newLevel * 3;
+
+    money += reward;
+
+    updateMoney();
+}
+
+
+/* =========================
+   ACHETER
+========================= */
+
+buyButton.addEventListener("click", () => {
+
+    if (money < BUY_PRICE) {
+
+        showMessage("Pas assez de pièces.");
+
+        return;
+    }
+
+    const emptyIndex =
+        slots.findIndex(slot => slot === null);
+
+    if (emptyIndex === -1) {
+
+        showMessage(
+            "Les 9 cases sont déjà occupées."
+        );
+
+        return;
+    }
+
+    money -= BUY_PRICE;
+
+    slots[emptyIndex] = {
+        level: 1
+    };
+
+    renderBoard(
+        emptyIndex,
+        "buy"
+    );
+
+    showMessage(
+        "Un nouveau slime apparaît !"
+    );
+});
+
+
+/* =========================
+   SAUVEGARDE
+========================= */
+
+function createSave() {
+
+    const saveObject = {
+
+        version: 1,
+
+        money: money,
+
+        slots: slots,
+
+        savedAt: Date.now()
+    };
+
+    /*
+        JSON puis Base64.
+        Ça donne un code assez compact à
+        copier-coller.
+    */
+
+    const json = JSON.stringify(saveObject);
+
+    return btoa(
+        encodeURIComponent(json)
+    );
+}
+
+
+function loadSave(code) {
+
+    try {
+
+        const json =
+            decodeURIComponent(
+                atob(code.trim())
+            );
+
+        const data =
+            JSON.parse(json);
+
+        if (!data ||
+            !Array.isArray(data.slots) ||
+            data.slots.length !== 9) {
+
+            throw new Error("Sauvegarde invalide");
+        }
+
+        if (typeof data.money !== "number") {
+
+            throw new Error("Sauvegarde invalide");
+        }
+
+        /*
+            Vérification des niveaux.
+        */
+
+        for (const slot of data.slots) {
+
+            if (slot !== null) {
+
+                if (
+                    typeof slot.level !== "number" ||
+                    slot.level < 1 ||
+                    slot.level > MAX_LEVEL
+                ) {
+                    throw new Error(
+                        "Niveau invalide"
+                    );
+                }
+            }
+        }
+
+        money = Math.max(
+            0,
+            Math.floor(data.money)
+        );
+
+        slots = data.slots;
+
+        renderBoard();
+
+        return true;
+
+    } catch (error) {
+
+        return false;
+    }
+}
+
+
+/* =========================
+   BOUTON EXPORT
+========================= */
+
+document
+    .getElementById("exportButton")
+    .addEventListener("click", async () => {
+
+        const code = createSave();
+
+        saveArea.value = code;
+
+        /*
+            Tentative de copie automatique.
+        */
+
+        try {
+
+            await navigator.clipboard.writeText(code);
+
+            showMessage(
+                "Sauvegarde copiée !"
+            );
+
+        } catch {
+
+            saveArea.select();
+
+            showMessage(
+                "Code généré. Copie-le manuellement."
+            );
+        }
+    });
+
+
+/* =========================
+   BOUTON IMPORT
+========================= */
+
+document
+    .getElementById("importButton")
+    .addEventListener("click", () => {
+
+        const code = saveArea.value.trim();
+
+        if (!code) {
+
+            showMessage(
+                "Colle d'abord une sauvegarde."
+            );
+
+            return;
+        }
+
+        if (loadSave(code)) {
+
+            showMessage(
+                "Sauvegarde chargée !"
+            );
+
+        } else {
+
+            showMessage(
+                "Cette sauvegarde est invalide."
+            );
+        }
+    });
+
+
+/* =========================
+   SAUVEGARDE AUTOMATIQUE
+========================= */
+
+setInterval(() => {
+
+    localStorage.setItem(
+        "slimeMergeAutoSave",
+        createSave()
+    );
+
+}, 3000);
+
+
+/* =========================
+   CHARGEMENT AUTOMATIQUE
+========================= */
+
+function loadAutomaticSave() {
+
+    const saved =
+        localStorage.getItem(
+            "slimeMergeAutoSave"
+        );
+
+    if (saved) {
+
+        if (loadSave(saved)) {
+
+            showMessage(
+                "Sauvegarde automatique chargée."
+            );
+
+            return;
+        }
+    }
+
+    renderBoard();
+}
+
+
+/* =========================
+   DÉMARRAGE
+========================= */
+
+setupDragAndDrop();
+
+loadAutomaticSave();
+
+</script>
+
+</body>
+</html>
