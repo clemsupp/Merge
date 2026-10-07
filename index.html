@@ -107,8 +107,6 @@ body {
     font-weight: 800;
 
     color: #d9e8dc;
-
-    margin-bottom: 1px;
 }
 
 
@@ -136,8 +134,7 @@ body {
 
     line-height: 1.3;
 
-    font-family:
-        monospace;
+    font-family: monospace;
 
     touch-action: auto;
 }
@@ -188,22 +185,12 @@ body {
     font-weight: 800;
 
     cursor: pointer;
-
-    box-shadow:
-        0 3px 8px rgba(0,0,0,.25);
 }
 
 
 .save-buttons button:active {
 
     transform: scale(.96);
-
-    background:
-        linear-gradient(
-            180deg,
-            #4a654f,
-            #304235
-        );
 }
 
 
@@ -256,9 +243,6 @@ body {
     font-weight: 900;
 
     letter-spacing: -.8px;
-
-    text-shadow:
-        0 4px 15px rgba(0,0,0,.35);
 }
 
 
@@ -274,16 +258,34 @@ body {
 
 
 /* =========================================================
+   ZONE DU PLATEAU + STOCKAGE
+   ========================================================= */
+
+.game-area {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    width: 100%;
+}
+
+
+/* =========================================================
    PLATEAU
    ========================================================= */
 
 .board {
 
-    width: min(94vw, 500px);
+    width: min(72vw, 400px);
 
     aspect-ratio: 1 / 1;
 
-    margin: 0 auto;
+    margin: 0;
 
     display: grid;
 
@@ -352,6 +354,88 @@ body {
 
 
 /* =========================================================
+   STOCKAGE
+   ========================================================= */
+
+.storage {
+
+    width: 92px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+.storage-title {
+
+    font-size: 11px;
+
+    font-weight: 900;
+
+    color:
+        rgba(255,255,255,.65);
+
+    text-align: center;
+}
+
+
+.storage-slot {
+
+    width: 82px;
+    height: 82px;
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(38,48,41,.95),
+            rgba(18,23,20,.95)
+        );
+
+    border:
+        1px solid
+        rgba(190,255,190,.10);
+
+    box-shadow:
+        inset 0 1px
+        rgba(255,255,255,.04),
+        0 7px 15px
+        rgba(0,0,0,.25);
+
+    touch-action: none;
+}
+
+
+.storage-slot.empty::after {
+
+    content: "+";
+
+    position: absolute;
+
+    font-size: 22px;
+
+    font-weight: 300;
+
+    color:
+        rgba(255,255,255,.14);
+}
+
+
+/* =========================================================
    SLIMES
    ========================================================= */
 
@@ -408,11 +492,9 @@ body {
     background:
         rgba(255,255,255,.55);
 
-    filter:
-        blur(1px);
+    filter: blur(1px);
 
-    transform:
-        rotate(-18deg);
+    transform: rotate(-18deg);
 }
 
 
@@ -452,7 +534,7 @@ body {
 
 
 /* =========================================================
-   VISAGES
+   VISAGE
    ========================================================= */
 
 .face {
@@ -507,8 +589,27 @@ body {
 }
 
 
+.level-icon {
+
+    position: absolute;
+
+    bottom: 8%;
+
+    right: 8%;
+
+    font-size:
+        clamp(12px, 3vw, 22px);
+
+    filter:
+        drop-shadow(
+            0 2px 2px
+            rgba(0,0,0,.3)
+        );
+}
+
+
 /* =========================================================
-   NIVEAUX
+   COULEURS DES SLIMES
    ========================================================= */
 
 .level-1 {
@@ -631,32 +732,17 @@ body {
         );
 
     box-shadow:
-        inset 0 7px 10px rgba(255,255,255,.25),
-        inset 0 -10px 14px rgba(0,0,0,.18),
-        0 0 25px rgba(255,180,40,.4);
-}
-
-
-.level-icon {
-
-    position: absolute;
-
-    bottom: 8%;
-
-    right: 8%;
-
-    font-size: clamp(12px, 3vw, 22px);
-
-    filter:
-        drop-shadow(
-            0 2px 2px
-            rgba(0,0,0,.3)
-        );
+        inset 0 7px 10px
+        rgba(255,255,255,.25),
+        inset 0 -10px 14px
+        rgba(0,0,0,.18),
+        0 0 25px
+        rgba(255,180,40,.4);
 }
 
 
 /* =========================================================
-   BOUTON AJOUTER
+   BOUTON
    ========================================================= */
 
 .buy {
@@ -694,10 +780,6 @@ body {
         rgba(255,255,255,.22);
 
     touch-action: manipulation;
-
-    transition:
-        transform .08s ease,
-        filter .08s ease;
 }
 
 
@@ -757,21 +839,15 @@ body {
 @keyframes mergePop {
 
     0% {
-
-        transform:
-            scale(.65);
+        transform: scale(.65);
     }
 
     60% {
-
-        transform:
-            scale(1.18);
+        transform: scale(1.18);
     }
 
     100% {
-
-        transform:
-            scale(1);
+        transform: scale(1);
     }
 }
 
@@ -786,16 +862,16 @@ body {
 @keyframes newPop {
 
     0% {
-
         transform:
             scale(.5);
+
         opacity: .2;
     }
 
     100% {
-
         transform:
             scale(1);
+
         opacity: 1;
     }
 }
@@ -826,11 +902,9 @@ body {
 <body>
 
 
-<!-- =======================================================
-     SAUVEGARDE
-     IMPORTANT : ce panneau est EN DEHORS de .game
-     pour que position:fixed reste relatif à l'écran.
-     ======================================================= -->
+<!-- =====================================================
+     PANNEAU SAUVEGARDE
+     ===================================================== -->
 
 <div class="save-panel">
 
@@ -873,9 +947,9 @@ body {
 </div>
 
 
-<!-- =======================================================
+<!-- =====================================================
      JEU
-     ======================================================= -->
+     ===================================================== -->
 
 <div class="game">
 
@@ -893,55 +967,91 @@ body {
     </div>
 
 
-    <div
-        id="board"
-        class="board"
-    >
+    <!-- PLATEAU + STOCKAGE -->
+
+    <div class="game-area">
+
+
+        <!-- PLATEAU -->
 
         <div
-            class="slot empty"
-            data-index="0"
-        ></div>
+            id="board"
+            class="board"
+        >
 
-        <div
-            class="slot empty"
-            data-index="1"
-        ></div>
+            <div
+                class="slot empty"
+                data-index="0"
+            ></div>
 
-        <div
-            class="slot empty"
-            data-index="2"
-        ></div>
+            <div
+                class="slot empty"
+                data-index="1"
+            ></div>
 
-        <div
-            class="slot empty"
-            data-index="3"
-        ></div>
+            <div
+                class="slot empty"
+                data-index="2"
+            ></div>
 
-        <div
-            class="slot empty"
-            data-index="4"
-        ></div>
+            <div
+                class="slot empty"
+                data-index="3"
+            ></div>
 
-        <div
-            class="slot empty"
-            data-index="5"
-        ></div>
+            <div
+                class="slot empty"
+                data-index="4"
+            ></div>
 
-        <div
-            class="slot empty"
-            data-index="6"
-        ></div>
+            <div
+                class="slot empty"
+                data-index="5"
+            ></div>
 
-        <div
-            class="slot empty"
-            data-index="7"
-        ></div>
+            <div
+                class="slot empty"
+                data-index="6"
+            ></div>
 
-        <div
-            class="slot empty"
-            data-index="8"
-        ></div>
+            <div
+                class="slot empty"
+                data-index="7"
+            ></div>
+
+            <div
+                class="slot empty"
+                data-index="8"
+            ></div>
+
+        </div>
+
+
+        <!-- STOCKAGE À DROITE -->
+
+        <div class="storage">
+
+            <div class="storage-title">
+                Stockage
+            </div>
+
+            <div
+                class="storage-slot empty"
+                data-storage="0"
+            ></div>
+
+            <div
+                class="storage-slot empty"
+                data-storage="1"
+            ></div>
+
+            <div
+                class="storage-slot empty"
+                data-storage="2"
+            ></div>
+
+        </div>
+
 
     </div>
 
@@ -968,32 +1078,27 @@ body {
 
 
 /* =========================================================
-   DONNÉES
+   CONSTANTES
    ========================================================= */
 
 const MAX_LEVEL = 10;
 
 
+/* =========================================================
+   NOMS
+   ========================================================= */
+
 const LEVEL_NAMES = [
 
     "Petit slime",
-
     "Slime bleu",
-
     "Slime magique",
-
     "Slime doré",
-
     "Slime rose",
-
     "Slime royal",
-
     "Slime solaire",
-
     "Slime céleste",
-
     "Slime légendaire",
-
     "Slime ultime"
 
 ];
@@ -1002,30 +1107,21 @@ const LEVEL_NAMES = [
 const LEVEL_ICONS = [
 
     "🫧",
-
     "💧",
-
     "🔮",
-
     "✨",
-
     "💗",
-
     "👑",
-
     "☀️",
-
     "🌙",
-
     "💎",
-
     "🌟"
 
 ];
 
 
 /* =========================================================
-   ÉTAT
+   ÉTAT DU JEU
    ========================================================= */
 
 let slots = [
@@ -1043,11 +1139,24 @@ let slots = [
 ];
 
 
+/* 3 cases de stockage */
+
+let storageSlots = [
+
+    null,
+    null,
+    null
+
+];
+
+
+let draggedType = null;
+
 let draggedIndex = null;
 
-let draggedElement = null;
-
 let pointerId = null;
+
+let draggedElement = null;
 
 let dragClone = null;
 
@@ -1078,29 +1187,38 @@ let messageTimer = null;
 
 function showMessage(text) {
 
-    message.textContent = text;
+    message.textContent =
+        text;
 
-    message.classList.add("show");
-
-    clearTimeout(messageTimer);
-
-    messageTimer = setTimeout(
-        () => {
-
-            message.classList.remove("show");
-
-        },
-        1500
+    message.classList.add(
+        "show"
     );
+
+    clearTimeout(
+        messageTimer
+    );
+
+    messageTimer =
+        setTimeout(
+            () => {
+
+                message.classList.remove(
+                    "show"
+                );
+
+            },
+            1500
+        );
 }
 
 
 /* =========================================================
-   CRÉATION D'UN SLIME
+   CRÉER UN SLIME
    ========================================================= */
 
 function createSlimeElement(
     level,
+    type,
     index
 ) {
 
@@ -1110,11 +1228,14 @@ function createSlimeElement(
     slime.className =
         "slime level-" + level;
 
-    slime.dataset.index =
-        index;
-
     slime.dataset.level =
         level;
+
+    slime.dataset.type =
+        type;
+
+    slime.dataset.index =
+        index;
 
 
     const face =
@@ -1145,11 +1266,17 @@ function createSlimeElement(
         "mouth";
 
 
-    face.appendChild(eye1);
+    face.appendChild(
+        eye1
+    );
 
-    face.appendChild(eye2);
+    face.appendChild(
+        eye2
+    );
 
-    face.appendChild(mouth);
+    face.appendChild(
+        mouth
+    );
 
 
     const icon =
@@ -1162,13 +1289,18 @@ function createSlimeElement(
         LEVEL_ICONS[level - 1];
 
 
-    slime.appendChild(face);
+    slime.appendChild(
+        face
+    );
 
-    slime.appendChild(icon);
+    slime.appendChild(
+        icon
+    );
 
 
     addDragEvents(
         slime,
+        type,
         index
     );
 
@@ -1186,16 +1318,19 @@ function renderBoard(
     animationClass = "new-animation"
 ) {
 
-    const slotElements =
-        board.querySelectorAll(".slot");
+    const boardSlots =
+        board.querySelectorAll(
+            ".slot"
+        );
 
 
-    slotElements.forEach(
+    boardSlots.forEach(
         (slotElement, index) => {
 
-            slotElement.innerHTML = "";
+            slotElement.innerHTML =
+                "";
 
-            slotElement.classList.remove(
+            slotElement.classList.add(
                 "empty"
             );
 
@@ -1206,22 +1341,27 @@ function renderBoard(
 
             if (!slime) {
 
-                slotElement.classList.add(
-                    "empty"
-                );
-
                 return;
             }
+
+
+            slotElement.classList.remove(
+                "empty"
+            );
 
 
             const slimeElement =
                 createSlimeElement(
                     slime.level,
+                    "board",
                     index
                 );
 
 
-            if (index === animationIndex) {
+            if (
+                index ===
+                animationIndex
+            ) {
 
                 slimeElement.classList.add(
                     animationClass
@@ -1237,12 +1377,69 @@ function renderBoard(
     );
 
 
+    renderStorage();
+
     autosave();
 }
 
 
 /* =========================================================
-   AJOUT
+   AFFICHAGE STOCKAGE
+   ========================================================= */
+
+function renderStorage() {
+
+    const storageElements =
+        document.querySelectorAll(
+            ".storage-slot"
+        );
+
+
+    storageElements.forEach(
+        (slotElement, index) => {
+
+            slotElement.innerHTML =
+                "";
+
+            slotElement.classList.add(
+                "empty"
+            );
+
+
+            const slime =
+                storageSlots[index];
+
+
+            if (!slime) {
+
+                return;
+            }
+
+
+            slotElement.classList.remove(
+                "empty"
+            );
+
+
+            const slimeElement =
+                createSlimeElement(
+                    slime.level,
+                    "storage",
+                    index
+                );
+
+
+            slotElement.appendChild(
+                slimeElement
+            );
+
+        }
+    );
+}
+
+
+/* =========================================================
+   AJOUTER UN SLIME
    ========================================================= */
 
 buyButton.addEventListener(
@@ -1254,7 +1451,8 @@ buyButton.addEventListener(
 
         const index =
             slots.findIndex(
-                slot => slot === null
+                slot =>
+                    slot === null
             );
 
 
@@ -1275,7 +1473,9 @@ buyButton.addEventListener(
         };
 
 
-        renderBoard(index);
+        renderBoard(
+            index
+        );
 
 
         showMessage(
@@ -1305,9 +1505,9 @@ buyButton.addEventListener(
 
 function addDragEvents(
     slime,
+    type,
     index
 ) {
-
 
     slime.addEventListener(
         "pointerdown",
@@ -1324,6 +1524,9 @@ function addDragEvents(
 
             event.preventDefault();
 
+
+            draggedType =
+                type;
 
             draggedIndex =
                 index;
@@ -1436,12 +1639,11 @@ function addDragEvents(
             passive: false
         }
     );
-
 }
 
 
 /* =========================================================
-   CLONE DU SLIME
+   CLONE DE DRAG
    ========================================================= */
 
 function createDragClone(
@@ -1464,10 +1666,12 @@ function createDragClone(
         y + "px";
 
     dragClone.style.width =
-        slime.getBoundingClientRect().width + "px";
+        slime.getBoundingClientRect().width +
+        "px";
 
     dragClone.style.height =
-        slime.getBoundingClientRect().height + "px";
+        slime.getBoundingClientRect().height +
+        "px";
 
     dragClone.style.transform =
         "translate(-50%, -50%) scale(1.12)";
@@ -1477,6 +1681,7 @@ function createDragClone(
 
     dragClone.style.zIndex =
         "99999";
+
 
     dragClone.classList.remove(
         "dragging"
@@ -1490,7 +1695,7 @@ function createDragClone(
 
 
 /* =========================================================
-   DÉPLACEMENT DU CLONE
+   DÉPLACER CLONE
    ========================================================= */
 
 function moveDragClone(
@@ -1513,7 +1718,7 @@ function moveDragClone(
 
 
 /* =========================================================
-   FIN DU DRAG
+   FIN DRAG
    ========================================================= */
 
 function finishDrag(
@@ -1522,16 +1727,13 @@ function finishDrag(
 ) {
 
     const target =
-        getSlotAtPoint(
+        getDropTarget(
             x,
             y
         );
 
 
-    if (
-        target === null ||
-        draggedIndex === null
-    ) {
+    if (!target) {
 
         cancelDrag();
 
@@ -1539,20 +1741,30 @@ function finishDrag(
     }
 
 
-    const from =
+    const sourceType =
+        draggedType;
+
+    const sourceIndex =
         draggedIndex;
 
 
-    const to =
-        target;
+    let sourceSlime;
 
 
-    const sourceSlime =
-        slots[from];
+    if (
+        sourceType ===
+        "board"
+    ) {
 
+        sourceSlime =
+            slots[sourceIndex];
 
-    const targetSlime =
-        slots[to];
+    } else {
+
+        sourceSlime =
+            storageSlots[sourceIndex];
+
+    }
 
 
     if (!sourceSlime) {
@@ -1563,58 +1775,203 @@ function finishDrag(
     }
 
 
-    /* Même case */
+    /* ============================================
+       VERS LE STOCKAGE
+       ============================================ */
 
-    if (from === to) {
+    if (
+        target.type ===
+        "storage"
+    ) {
 
-        cancelDrag();
-
-        return;
-    }
+        const targetIndex =
+            target.index;
 
 
-    /* Case vide */
+        const targetSlime =
+            storageSlots[targetIndex];
 
-    if (!targetSlime) {
 
-        slots[to] =
+        /* Case vide */
+
+        if (!targetSlime) {
+
+            storageSlots[targetIndex] =
+                sourceSlime;
+
+
+            if (
+                sourceType ===
+                "board"
+            ) {
+
+                slots[sourceIndex] =
+                    null;
+
+            } else {
+
+                storageSlots[sourceIndex] =
+                    null;
+            }
+
+
+            cleanupDrag();
+
+            renderBoard();
+
+            showMessage(
+                "Slime stocké !"
+            );
+
+            return;
+        }
+
+
+        /* Même niveau = fusion */
+
+        if (
+            targetSlime.level ===
+            sourceSlime.level
+        ) {
+
+            if (
+                sourceSlime.level >=
+                MAX_LEVEL
+            ) {
+
+                showMessage(
+                    "Niveau maximum atteint."
+                );
+
+                cancelDrag();
+
+                return;
+            }
+
+
+            storageSlots[targetIndex] = {
+
+                level:
+                    sourceSlime.level + 1
+
+            };
+
+
+            if (
+                sourceType ===
+                "board"
+            ) {
+
+                slots[sourceIndex] =
+                    null;
+
+            } else {
+
+                storageSlots[sourceIndex] =
+                    null;
+            }
+
+
+            cleanupDrag();
+
+            renderBoard();
+
+            showMessage(
+                "Fusion !"
+            );
+
+            return;
+        }
+
+
+        /* Échange */
+
+        storageSlots[targetIndex] =
             sourceSlime;
 
-        slots[from] =
-            null;
+
+        if (
+            sourceType ===
+            "board"
+        ) {
+
+            slots[sourceIndex] =
+                targetSlime;
+
+        } else {
+
+            storageSlots[sourceIndex] =
+                targetSlime;
+        }
 
 
         cleanupDrag();
 
-
-        renderBoard(
-            to,
-            "new-animation"
-        );
-
-
-        autosave();
+        renderBoard();
 
         return;
     }
 
 
-    /* Même niveau = fusion */
+    /* ============================================
+       VERS LE PLATEAU
+       ============================================ */
 
     if (
-        targetSlime.level ===
-        sourceSlime.level
+        target.type ===
+        "board"
     ) {
 
+        const targetIndex =
+            target.index;
+
+
+        const targetSlime =
+            slots[targetIndex];
+
+
+        /* Case vide */
+
+        if (!targetSlime) {
+
+            slots[targetIndex] =
+                sourceSlime;
+
+
+            if (
+                sourceType ===
+                "storage"
+            ) {
+
+                storageSlots[sourceIndex] =
+                    null;
+
+            } else {
+
+                slots[sourceIndex] =
+                    null;
+            }
+
+
+            cleanupDrag();
+
+            renderBoard(
+                targetIndex,
+                "new-animation"
+            );
+
+            return;
+        }
+
+
+        /* Même case */
 
         if (
-            sourceSlime.level >=
-            MAX_LEVEL
+            sourceType ===
+            "board" &&
+            sourceIndex ===
+            targetIndex
         ) {
-
-            showMessage(
-                "Niveau maximum atteint."
-            );
 
             cancelDrag();
 
@@ -1622,62 +1979,99 @@ function finishDrag(
         }
 
 
-        slots[to] = {
+        /* Même niveau = fusion */
 
-            level:
-                sourceSlime.level + 1
+        if (
+            targetSlime.level ===
+            sourceSlime.level
+        ) {
 
-        };
+            if (
+                sourceSlime.level >=
+                MAX_LEVEL
+            ) {
+
+                showMessage(
+                    "Niveau maximum atteint."
+                );
+
+                cancelDrag();
+
+                return;
+            }
 
 
-        slots[from] =
-            null;
+            slots[targetIndex] = {
+
+                level:
+                    sourceSlime.level + 1
+
+            };
+
+
+            if (
+                sourceType ===
+                "storage"
+            ) {
+
+                storageSlots[sourceIndex] =
+                    null;
+
+            } else {
+
+                slots[sourceIndex] =
+                    null;
+            }
+
+
+            cleanupDrag();
+
+            renderBoard(
+                targetIndex,
+                "merge-animation"
+            );
+
+            showMessage(
+                "Fusion !"
+            );
+
+            return;
+        }
+
+
+        /* Échange */
+
+        slots[targetIndex] =
+            sourceSlime;
+
+
+        if (
+            sourceType ===
+            "storage"
+        ) {
+
+            storageSlots[sourceIndex] =
+                targetSlime;
+
+        } else {
+
+            slots[sourceIndex] =
+                targetSlime;
+        }
 
 
         cleanupDrag();
 
-
-        renderBoard(
-            to,
-            "merge-animation"
-        );
-
-
-        showMessage(
-            "Fusion !"
-        );
-
-
-        autosave();
-
-        return;
+        renderBoard();
     }
-
-
-    /* Niveaux différents = échange */
-
-    slots[from] =
-        targetSlime;
-
-    slots[to] =
-        sourceSlime;
-
-
-    cleanupDrag();
-
-
-    renderBoard();
-
-
-    autosave();
 }
 
 
 /* =========================================================
-   TROUVER UNE CASE
+   TROUVER LA CIBLE
    ========================================================= */
 
-function getSlotAtPoint(
+function getDropTarget(
     x,
     y
 ) {
@@ -1694,18 +2088,50 @@ function getSlotAtPoint(
         of elements
     ) {
 
-        const slot =
-            element.closest(".slot");
+        const boardSlot =
+            element.closest(
+                ".slot"
+            );
 
 
         if (
-            slot &&
-            board.contains(slot)
+            boardSlot &&
+            board.contains(
+                boardSlot
+            )
         ) {
 
-            return Number(
-                slot.dataset.index
+            return {
+
+                type: "board",
+
+                index:
+                    Number(
+                        boardSlot.dataset.index
+                    )
+
+            };
+        }
+
+
+        const storageSlot =
+            element.closest(
+                ".storage-slot"
             );
+
+
+        if (storageSlot) {
+
+            return {
+
+                type: "storage",
+
+                index:
+                    Number(
+                        storageSlot.dataset.storage
+                    )
+
+            };
         }
     }
 
@@ -1715,7 +2141,7 @@ function getSlotAtPoint(
 
 
 /* =========================================================
-   ANNULER DRAG
+   ANNULER
    ========================================================= */
 
 function cancelDrag() {
@@ -1725,7 +2151,7 @@ function cancelDrag() {
 
 
 /* =========================================================
-   NETTOYAGE DRAG
+   NETTOYAGE
    ========================================================= */
 
 function cleanupDrag() {
@@ -1742,11 +2168,15 @@ function cleanupDrag() {
 
         dragClone.remove();
 
-        dragClone = null;
+        dragClone =
+            null;
     }
 
 
     draggedElement =
+        null;
+
+    draggedType =
         null;
 
     draggedIndex =
@@ -1758,16 +2188,20 @@ function cleanupDrag() {
 
 
 /* =========================================================
-   SAUVEGARDE
+   CRÉER SAUVEGARDE
    ========================================================= */
 
 function createSave() {
 
     const data = {
 
-        version: 1,
+        version: 2,
 
-        slots: slots,
+        slots:
+            slots,
+
+        storageSlots:
+            storageSlots,
 
         savedAt:
             Date.now()
@@ -1788,7 +2222,7 @@ function createSave() {
 
 
 /* =========================================================
-   CHARGEMENT
+   CHARGER SAUVEGARDE
    ========================================================= */
 
 function loadSave(
@@ -1819,7 +2253,27 @@ function loadSave(
         }
 
 
-        const valid =
+        const loadedStorage =
+            Array.isArray(
+                data.storageSlots
+            )
+                ? data.storageSlots
+                : [
+                    null,
+                    null,
+                    null
+                ];
+
+
+        if (
+            loadedStorage.length !== 3
+        ) {
+
+            return false;
+        }
+
+
+        const validSlots =
             data.slots.every(
                 slot => {
 
@@ -1832,19 +2286,49 @@ function loadSave(
 
 
                     return (
-                        typeof slot === "object" &&
+                        typeof slot ===
+                            "object" &&
                         Number.isInteger(
                             slot.level
                         ) &&
                         slot.level >= 1 &&
-                        slot.level <= MAX_LEVEL
+                        slot.level <=
+                            MAX_LEVEL
                     );
-
                 }
             );
 
 
-        if (!valid) {
+        const validStorage =
+            loadedStorage.every(
+                slot => {
+
+                    if (
+                        slot === null
+                    ) {
+
+                        return true;
+                    }
+
+
+                    return (
+                        typeof slot ===
+                            "object" &&
+                        Number.isInteger(
+                            slot.level
+                        ) &&
+                        slot.level >= 1 &&
+                        slot.level <=
+                            MAX_LEVEL
+                    );
+                }
+            );
+
+
+        if (
+            !validSlots ||
+            !validStorage
+        ) {
 
             return false;
         }
@@ -1868,7 +2352,28 @@ function loadSave(
                             slot.level
 
                     };
+                }
+            );
 
+
+        storageSlots =
+            loadedStorage.map(
+                slot => {
+
+                    if (
+                        slot === null
+                    ) {
+
+                        return null;
+                    }
+
+
+                    return {
+
+                        level:
+                            slot.level
+
+                    };
                 }
             );
 
@@ -1890,7 +2395,9 @@ function loadSave(
    ========================================================= */
 
 document
-    .getElementById("copyButton")
+    .getElementById(
+        "copyButton"
+    )
     .addEventListener(
         "click",
         async () => {
@@ -1919,9 +2426,7 @@ document
                 showMessage(
                     "Impossible de copier."
                 );
-
             }
-
         }
     );
 
@@ -1931,7 +2436,9 @@ document
    ========================================================= */
 
 document
-    .getElementById("pasteButton")
+    .getElementById(
+        "pasteButton"
+    )
     .addEventListener(
         "click",
         async () => {
@@ -1965,9 +2472,7 @@ document
                 showMessage(
                     "Impossible de lire le presse-papiers."
                 );
-
             }
-
         }
     );
 
@@ -1977,7 +2482,9 @@ document
    ========================================================= */
 
 document
-    .getElementById("importButton")
+    .getElementById(
+        "importButton"
+    )
     .addEventListener(
         "click",
         () => {
@@ -2009,9 +2516,7 @@ document
                 showMessage(
                     "Sauvegarde invalide."
                 );
-
             }
-
         }
     );
 
@@ -2030,7 +2535,6 @@ function autosave() {
         );
 
     } catch {}
-
 }
 
 
@@ -2046,18 +2550,14 @@ function loadAutoSave() {
 
         if (code) {
 
-            loadSave(code);
-
+            loadSave(
+                code
+            );
         }
 
     } catch {}
-
 }
 
-
-/* =========================================================
-   SAUVEGARDE AUTOMATIQUE
-   ========================================================= */
 
 setInterval(
     autosave,
@@ -2121,11 +2621,11 @@ document.addEventListener(
 
 
         if (
-            now - lastTouchEnd <= 300
+            now - lastTouchEnd <=
+            300
         ) {
 
             event.preventDefault();
-
         }
 
 
@@ -2140,11 +2640,10 @@ document.addEventListener(
 
 
 /* =========================================================
-   INITIALISATION
+   DÉMARRAGE
    ========================================================= */
 
 loadAutoSave();
-
 
 renderBoard();
 
