@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
+
 <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width,
-initial-scale=1,
-maximum-scale=1,
-minimum-scale=1,
-user-scalable=no,
-viewport-fit=cover">
-
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
+<meta
+    name="viewport"
+    content="width=device-width,
+    initial-scale=1,
+    maximum-scale=1,
+    minimum-scale=1,
+    user-scalable=no,
+    viewport-fit=cover"
+>
 
 <title>Slime Merge</title>
 
@@ -20,12 +21,6 @@ viewport-fit=cover">
 
 * {
     box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-
-    user-select: none;
-    -webkit-user-select: none;
-    -webkit-touch-callout: none;
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -35,633 +30,33 @@ body {
     width: 100%;
     height: 100%;
 
+    margin: 0;
+    padding: 0;
+
     overflow: hidden;
 
     touch-action: none;
-    overscroll-behavior: none;
 
     background:
         radial-gradient(
-            circle at 50% -20%,
-            #31483c 0%,
-            #1a251f 38%,
-            #0a0e0b 100%
+            circle at 50% 30%,
+            #252d27 0%,
+            #171b18 45%,
+            #0d100e 100%
         );
 
     color: white;
 
     font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
         Arial,
+        Helvetica,
         sans-serif;
-}
-
-.game {
-
-    width: min(94vw, 540px);
-    height: 100dvh;
-
-    margin: auto;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    overflow: hidden;
-
-    padding:
-        max(8px, env(safe-area-inset-top))
-        0
-        max(8px, env(safe-area-inset-bottom));
-}
-
-.header {
-
-    text-align: center;
-
-    margin-bottom: 10px;
-
-    flex-shrink: 0;
-}
-
-.title {
-
-    font-size:
-        clamp(30px, 8vw, 44px);
-
-    line-height: 1;
-
-    font-weight: 950;
-
-    letter-spacing: -2px;
-
-    color: #f3fff7;
-
-    text-shadow:
-        0 3px 0 #07100a,
-        0 0 25px rgba(120,255,160,.12);
-}
-
-.subtitle {
-
-    margin-top: 5px;
-
-    color: #87968d;
-
-    font-size: 11px;
-}
-
-.board {
-
-    width: 100%;
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    gap: 8px;
-
-    padding: 9px;
-
-    border-radius: 23px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #29342d,
-            #151c17
-        );
-
-    border:
-        1px solid rgba(255,255,255,.08);
-
-    box-shadow:
-        0 20px 45px rgba(0,0,0,.55),
-        inset 0 1px rgba(255,255,255,.07);
-
-    flex-shrink: 0;
-}
-
-.slot {
-
-    position: relative;
-
-    width: 100%;
-
-    aspect-ratio: 1;
-
-    border-radius: 17px;
-
-    display: flex;
-
-    justify-content: center;
-    align-items: center;
-
-    background:
-        radial-gradient(
-            circle at 50% 35%,
-            rgba(255,255,255,.035),
-            transparent 65%
-        ),
-        #101511;
-
-    border:
-        2px solid #202a24;
-
-    box-shadow:
-        inset 0 4px 10px rgba(0,0,0,.28),
-        inset 0 -4px 10px rgba(0,0,0,.18);
-
-    transition:
-        transform .15s ease,
-        border-color .15s ease,
-        background .15s ease;
-}
-
-.slot.empty::after {
-
-    content: "+";
-
-    color: #27322c;
-
-    font-size: 29px;
-
-    font-weight: 300;
-}
-
-.slot.target {
-
-    transform: scale(.95);
-
-    border-color: #aaff61;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(170,255,97,.15),
-            transparent 70%
-        );
-
-    box-shadow:
-        0 0 20px rgba(165,255,90,.15),
-        inset 0 0 15px rgba(165,255,90,.08);
-}
-
-.slot.target-merge {
-
-    transform: scale(.91);
-
-    border-color: #ffffff;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(193,255,103,.24),
-            transparent 70%
-        );
-
-    animation:
-        mergeTarget .45s
-        ease-in-out
-        infinite alternate;
-}
-
-@keyframes mergeTarget {
-
-    from {
-        box-shadow:
-            0 0 8px rgba(184,255,100,.15);
-    }
-
-    to {
-        box-shadow:
-            0 0 25px rgba(184,255,100,.55);
-    }
-}
-
-.slime {
-
-    position: relative;
-
-    width: 76%;
-    height: 76%;
-
-    border-radius:
-        48% 52% 45% 55% /
-        55% 48% 52% 45%;
-
-    display: flex;
-
-    justify-content: center;
-    align-items: center;
-
-    box-shadow:
-
-        inset
-        7px 9px 11px
-        rgba(255,255,255,.29),
-
-        inset
-        -9px -11px 13px
-        rgba(0,0,0,.27),
-
-        0 8px 12px
-        rgba(0,0,0,.45);
-
-    will-change: transform;
-
-    transition:
-        transform .12s ease,
-        filter .12s ease;
-}
-
-.slime::before {
-
-    content: "";
-
-    position: absolute;
-
-    width: 39%;
-    height: 21%;
-
-    left: 16%;
-    top: 13%;
-
-    border-radius: 50%;
-
-    background:
-        rgba(255,255,255,.72);
-
-    transform:
-        rotate(-25deg);
-
-    filter: blur(.7px);
-}
-
-.slime::after {
-
-    content: "";
-
-    position: absolute;
-
-    width: 13%;
-    height: 8%;
-
-    left: 32%;
-    top: 36%;
-
-    border-radius: 50%;
-
-    background:
-        rgba(255,255,255,.32);
-}
-
-.slime-content {
-
-    position: relative;
-
-    z-index: 2;
-
-    text-align: center;
-
-    pointer-events: none;
-
-    text-shadow:
-        0 2px 3px rgba(0,0,0,.45);
-}
-
-.slime-icon {
-
-    font-size:
-        clamp(21px, 5.5vw, 31px);
-
-    line-height: 1;
-}
-
-.level {
-
-    margin-top: 3px;
-
-    font-size:
-        clamp(10px, 2.7vw, 14px);
-
-    line-height: 1;
-
-    font-weight: 950;
-}
-
-.level-name {
-
-    margin-top: 2px;
-
-    font-size:
-        clamp(6px, 1.8vw, 9px);
-
-    line-height: 1;
-
-    font-weight: 800;
-
-    opacity: .85;
-}
-
-.level-1 {
-
-    background:
-        radial-gradient(
-            circle at 35% 25%,
-            #e0ff9d,
-            transparent 20%
-        ),
-        linear-gradient(
-            145deg,
-            #9be45b,
-            #54a833
-        );
-}
-
-.level-2 {
-
-    background:
-        radial-gradient(
-            circle at 35% 25%,
-            #c2ffff,
-            transparent 20%
-        ),
-        linear-gradient(
-            145deg,
-            #55e4db,
-            #218f9a
-        );
-}
-
-.level-3 {
-
-    background:
-        radial-gradient(
-            circle at 35% 25%,
-            #ecc4ff,
-            transparent 20%
-        ),
-        linear-gradient(
-            145deg,
-            #bd69ed,
-            #7137a7
-        );
-}
-
-.level-4 {
-
-    background:
-        radial-gradient(
-            circle at 35% 25%,
-            #ffe9ae,
-            transparent 20%
-        ),
-        linear-gradient(
-            145deg,
-            #ffbd4a,
-            #d46a20
-        );
-}
-
-.level-5 {
-
-    background:
-        radial-gradient(
-            circle at 35% 25%,
-            #ffc4d4,
-            transparent 20%
-        ),
-        linear-gradient(
-            145deg,
-            #ff668d,
-            #b52f62
-        );
-}
-
-.level-6 {
-
-    background:
-        radial-gradient(
-            circle at 35% 25%,
-            #e3d8ff,
-            transparent 20%
-        ),
-        linear-gradient(
-            145deg,
-            #7d72ff,
-            #4238b4
-        );
-}
-
-.level-7 {
-
-    background:
-        radial-gradient(
-            circle at 35% 25%,
-            #fff9ad,
-            transparent 20%
-        ),
-        linear-gradient(
-            145deg,
-            #f5e85b,
-            #bda51c
-        );
-}
-
-.level-8 {
-
-    background:
-        radial-gradient(
-            circle at 35% 25%,
-            #ddffe9,
-            transparent 20%
-        ),
-        linear-gradient(
-            145deg,
-            #70efae,
-            #22a979
-        );
-}
-
-.level-9 {
-
-    background:
-        radial-gradient(
-            circle at 35% 25%,
-            #ffffff,
-            transparent 20%
-        ),
-        linear-gradient(
-            145deg,
-            #f7f7ff,
-            #9494c9
-        );
-}
-
-.level-10 {
-
-    background:
-        radial-gradient(
-            circle at 35% 25%,
-            #ffffff,
-            transparent 20%
-        ),
-        linear-gradient(
-            145deg,
-            #ffffff,
-            #9de6ff
-        );
-
-    box-shadow:
-
-        inset
-        7px 9px 11px
-        rgba(255,255,255,.55),
-
-        inset
-        -9px -11px 13px
-        rgba(0,0,0,.14),
-
-        0 0 25px
-        rgba(143,226,255,.7);
-}
-
-.slime.dragging {
-
-    transform:
-        scale(1.12)
-        rotate(-4deg);
-
-    filter:
-        brightness(1.12)
-        drop-shadow(
-            0 12px 14px
-            rgba(0,0,0,.45)
-        );
-}
-
-.drag-clone {
-
-    position: fixed;
-
-    width: 105px;
-    height: 105px;
-
-    pointer-events: none;
-
-    z-index: 9999;
-
-    display: flex;
-
-    justify-content: center;
-    align-items: center;
-
-    transform:
-        translate(-50%,-50%);
-
-    opacity: .97;
-
-    filter:
-        drop-shadow(
-            0 13px 16px
-            rgba(0,0,0,.4)
-        );
-}
-
-.drag-clone .slime {
-
-    width: 78px;
-    height: 78px;
-
-    transform:
-        scale(1.08)
-        rotate(-3deg);
-}
-
-.controls {
-
-    width: 100%;
-
-    margin-top: 10px;
-
-    display: flex;
-
-    justify-content: center;
-
-    flex-shrink: 0;
-}
-
-.buy {
-
-    width: 90%;
-
-    min-height: 54px;
-
-    padding: 12px 20px;
-
-    border: none;
-
-    border-radius: 17px;
-
-    color: #15200c;
-
-    background:
-        linear-gradient(
-            145deg,
-            #d2ff76,
-            #82c83e
-        );
-
-    font-size: 17px;
-
-    font-weight: 950;
-
-    box-shadow:
-        0 5px 0 #4e7926,
-        0 10px 20px
-        rgba(117,198,62,.18);
-
-    touch-action: manipulation;
-
-    transition:
-        transform .08s ease,
-        box-shadow .08s ease;
-}
-
-.buy:active {
-
-    transform:
-        translateY(4px);
-
-    box-shadow:
-        0 1px 0 #4e7926;
-}
-
-.message {
-
-    height: 18px;
-
-    margin-top: 4px;
-
-    text-align: center;
-
-    color: #bfd8c7;
-
-    font-size: 10px;
-
-    font-weight: 800;
-
-    flex-shrink: 0;
 }
 
 
 /* =========================================================
-   SAUVEGARDE — BOX VERTICALE À GAUCHE
-========================================================= */
+   PANNEAU SAUVEGARDE
+   ========================================================= */
 
 .save-panel {
 
@@ -693,58 +88,67 @@ body {
         0 15px 35px rgba(0,0,0,.45),
         inset 0 1px rgba(255,255,255,.06);
 
-    z-index: 100;
+    z-index: 10000;
 
     display: flex;
+
     flex-direction: column;
+
     gap: 7px;
 }
 
+
 .save-title {
-
-    color: #d5e4d9;
-
-    font-size: 11px;
-
-    font-weight: 950;
 
     text-align: center;
 
-    margin-bottom: 2px;
+    font-size: 13px;
+
+    font-weight: 800;
+
+    color: #d9e8dc;
+
+    margin-bottom: 1px;
 }
 
-.save-area {
 
-    display: block;
+.save-area {
 
     width: 100%;
 
     height: 74px;
 
-    padding: 7px;
-
     resize: none;
 
-    border:
-        1px solid #303a34;
-
-    border-radius: 9px;
-
+    border: none;
     outline: none;
 
-    background: #080c09;
+    border-radius: 10px;
 
-    color: #9aa79f;
+    padding: 8px;
 
-    font-family: monospace;
+    background:
+        rgba(0,0,0,.28);
 
-    font-size: 7px;
+    color: #dcefe0;
 
-    user-select: text;
-    -webkit-user-select: text;
+    font-size: 10px;
+
+    line-height: 1.3;
+
+    font-family:
+        monospace;
 
     touch-action: auto;
 }
+
+
+.save-area::placeholder {
+
+    color:
+        rgba(220,239,224,.4);
+}
+
 
 .save-buttons {
 
@@ -757,6 +161,7 @@ body {
     margin-top: 1px;
 }
 
+
 .save-buttons button {
 
     width: 100%;
@@ -765,233 +170,715 @@ body {
 
     padding: 5px 6px;
 
-    border:
-        1px solid #354238;
+    border: none;
 
     border-radius: 9px;
 
     background:
         linear-gradient(
-            145deg,
-            #29352d,
-            #202922
+            180deg,
+            #3d5544,
+            #29392e
         );
 
-    color:
-        #d0dbd3;
+    color: white;
 
-    font-size: 9px;
+    font-size: 11px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 3px 8px rgba(0,0,0,.25);
+}
+
+
+.save-buttons button:active {
+
+    transform: scale(.96);
+
+    background:
+        linear-gradient(
+            180deg,
+            #4a654f,
+            #304235
+        );
+}
+
+
+/* =========================================================
+   JEU
+   ========================================================= */
+
+.game {
+
+    width:
+        min(94vw, 540px);
+
+    height: 100dvh;
+
+    margin: auto;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    overflow: hidden;
+
+    padding:
+        max(8px, env(safe-area-inset-top))
+        0
+        max(8px, env(safe-area-inset-bottom));
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.header {
+
+    text-align: center;
+
+    margin-bottom: 12px;
+}
+
+
+.title {
+
+    margin: 0;
+
+    font-size: 32px;
 
     font-weight: 900;
+
+    letter-spacing: -.8px;
+
+    text-shadow:
+        0 4px 15px rgba(0,0,0,.35);
+}
+
+
+.subtitle {
+
+    margin-top: 5px;
+
+    color:
+        rgba(255,255,255,.55);
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   PLATEAU
+   ========================================================= */
+
+.board {
+
+    width: min(94vw, 500px);
+
+    aspect-ratio: 1 / 1;
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    grid-template-rows:
+        repeat(3, 1fr);
+
+    gap: 10px;
+
+    padding: 10px;
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #252d27,
+            #151a17
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,.06);
+
+    box-shadow:
+        0 20px 45px rgba(0,0,0,.38),
+        inset 0 1px rgba(255,255,255,.04);
+}
+
+
+.slot {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 0;
+    min-height: 0;
+
+    border-radius: 18px;
+
+    background:
+        rgba(0,0,0,.16);
+
+    border:
+        1px solid
+        rgba(255,255,255,.045);
+
+    overflow: visible;
+
+    touch-action: none;
+}
+
+
+.slot.empty {
+
+    background:
+        rgba(0,0,0,.13);
+}
+
+
+/* =========================================================
+   SLIMES
+   ========================================================= */
+
+.slime {
+
+    width: 78%;
+    height: 78%;
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius:
+        48%
+        48%
+        42%
+        42%;
+
+    cursor: grab;
+
+    user-select: none;
+
+    touch-action: none;
+
+    transition:
+        transform .12s ease,
+        filter .12s ease;
+
+    box-shadow:
+        inset 0 7px 10px rgba(255,255,255,.15),
+        inset 0 -10px 14px rgba(0,0,0,.15),
+        0 8px 18px rgba(0,0,0,.3);
+}
+
+
+.slime::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 32%;
+    height: 18%;
+
+    left: 19%;
+    top: 13%;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,.55);
+
+    filter:
+        blur(1px);
+
+    transform:
+        rotate(-18deg);
+}
+
+
+.slime::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 11%;
+    height: 7%;
+
+    right: 20%;
+    top: 22%;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,.3);
+}
+
+
+.slime.dragging {
+
+    transform:
+        scale(1.15);
+
+    filter:
+        brightness(1.15)
+        drop-shadow(
+            0 12px 15px
+            rgba(0,0,0,.4)
+        );
+
+    z-index: 1000;
+}
+
+
+/* =========================================================
+   VISAGES
+   ========================================================= */
+
+.face {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 18%;
+
+    margin-top: 10%;
+}
+
+
+.eye {
+
+    width: 12px;
+    height: 16px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(20,25,20,.82);
+}
+
+
+.mouth {
+
+    position: absolute;
+
+    width: 20px;
+    height: 10px;
+
+    left: 50%;
+    top: 18px;
+
+    transform:
+        translateX(-50%);
+
+    border-bottom:
+        3px solid
+        rgba(20,25,20,.75);
+
+    border-radius:
+        0 0 50% 50%;
+}
+
+
+/* =========================================================
+   NIVEAUX
+   ========================================================= */
+
+.level-1 {
+
+    background:
+        radial-gradient(
+            circle at 35% 25%,
+            #d8fff0,
+            #6ee7b7 45%,
+            #159a67 100%
+        );
+}
+
+
+.level-2 {
+
+    background:
+        radial-gradient(
+            circle at 35% 25%,
+            #d8f5ff,
+            #58c7ff 45%,
+            #1874c5 100%
+        );
+}
+
+
+.level-3 {
+
+    background:
+        radial-gradient(
+            circle at 35% 25%,
+            #f0ddff,
+            #b46cff 45%,
+            #6421b9 100%
+        );
+}
+
+
+.level-4 {
+
+    background:
+        radial-gradient(
+            circle at 35% 25%,
+            #fffbd0,
+            #ffe45c 45%,
+            #d89400 100%
+        );
+}
+
+
+.level-5 {
+
+    background:
+        radial-gradient(
+            circle at 35% 25%,
+            #fff0f7,
+            #ff72b5 45%,
+            #c72b78 100%
+        );
+}
+
+
+.level-6 {
+
+    background:
+        radial-gradient(
+            circle at 35% 25%,
+            #fff6c9,
+            #ffc94d 45%,
+            #a86a00 100%
+        );
+}
+
+
+.level-7 {
+
+    background:
+        radial-gradient(
+            circle at 35% 25%,
+            #fff9cf,
+            #ffb51e 40%,
+            #ff5c00 100%
+        );
+}
+
+
+.level-8 {
+
+    background:
+        radial-gradient(
+            circle at 35% 25%,
+            #eefcff,
+            #7ee8ff 42%,
+            #2d65ff 100%
+        );
+}
+
+
+.level-9 {
+
+    background:
+        radial-gradient(
+            circle at 35% 25%,
+            #ffffff,
+            #a7c8ff 38%,
+            #5b32d6 100%
+        );
+}
+
+
+.level-10 {
+
+    background:
+        radial-gradient(
+            circle at 35% 25%,
+            #ffffff,
+            #ffe66b 30%,
+            #ff9f1c 60%,
+            #ef3b3b 100%
+        );
+
+    box-shadow:
+        inset 0 7px 10px rgba(255,255,255,.25),
+        inset 0 -10px 14px rgba(0,0,0,.18),
+        0 0 25px rgba(255,180,40,.4);
+}
+
+
+.level-icon {
+
+    position: absolute;
+
+    bottom: 8%;
+
+    right: 8%;
+
+    font-size: clamp(12px, 3vw, 22px);
+
+    filter:
+        drop-shadow(
+            0 2px 2px
+            rgba(0,0,0,.3)
+        );
+}
+
+
+/* =========================================================
+   BOUTON AJOUTER
+   ========================================================= */
+
+.buy {
+
+    width: 90%;
+
+    min-height: 54px;
+
+    margin:
+        13px auto 0;
+
+    border: none;
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #4fcb79,
+            #279b52
+        );
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: 900;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 7px 20px
+        rgba(25,130,65,.25),
+        inset 0 1px
+        rgba(255,255,255,.22);
 
     touch-action: manipulation;
 
     transition:
         transform .08s ease,
-        background .08s ease;
+        filter .08s ease;
 }
 
-.save-buttons button:active {
+
+.buy:active {
 
     transform:
-        scale(.96);
+        scale(.97);
 
-    background:
-        #344238;
+    filter:
+        brightness(.92);
 }
 
-.appear {
+
+/* =========================================================
+   MESSAGE
+   ========================================================= */
+
+.message {
+
+    height: 24px;
+
+    margin-top: 5px;
+
+    text-align: center;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    color:
+        rgba(255,255,255,.55);
+
+    opacity: 0;
+
+    transition:
+        opacity .2s ease;
+}
+
+
+.message.show {
+
+    opacity: 1;
+}
+
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+.merge-animation {
 
     animation:
-        appear
-        .38s
-        cubic-bezier(.2,.9,.3,1.3);
+        mergePop .35s ease;
 }
 
-@keyframes appear {
-
-    0% {
-        transform: scale(0);
-        opacity: 0;
-    }
-
-    65% {
-        transform: scale(1.16);
-        opacity: 1;
-    }
-
-    100% {
-        transform: scale(1);
-    }
-}
-
-.merge-pop {
-
-    animation:
-        mergePop
-        .52s
-        cubic-bezier(.15,.9,.25,1.25);
-}
 
 @keyframes mergePop {
 
     0% {
-        transform: scale(.4);
-        opacity: .15;
+
+        transform:
+            scale(.65);
     }
 
-    35% {
-        transform:
-            scale(1.27);
-        filter: brightness(1.65);
-    }
+    60% {
 
-    70% {
         transform:
-            scale(.91);
+            scale(1.18);
     }
 
     100% {
+
         transform:
             scale(1);
-        opacity: 1;
-        filter: brightness(1);
     }
 }
 
-.merge-flash {
 
-    position: fixed;
-
-    width: 85px;
-    height: 85px;
-
-    border-radius: 50%;
-
-    pointer-events: none;
-
-    z-index: 9998;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(255,255,255,.95) 0%,
-            rgba(191,255,99,.7) 20%,
-            rgba(191,255,99,0) 70%
-        );
-
-    transform:
-        translate(-50%,-50%);
+.new-animation {
 
     animation:
-        flash
-        .55s
-        ease-out
-        forwards;
+        newPop .3s ease;
 }
 
-@keyframes flash {
+
+@keyframes newPop {
 
     0% {
 
         transform:
-            translate(-50%,-50%)
-            scale(.25);
-
-        opacity: 1;
+            scale(.5);
+        opacity: .2;
     }
 
     100% {
 
         transform:
-            translate(-50%,-50%)
-            scale(2.1);
-
-        opacity: 0;
+            scale(1);
+        opacity: 1;
     }
 }
 
-@media (max-height: 650px) {
-
-    .title {
-        font-size: 29px;
-    }
-
-    .subtitle {
-        display: none;
-    }
-
-    .header {
-        margin-bottom: 6px;
-    }
-
-    .board {
-        gap: 6px;
-        padding: 7px;
-    }
-
-    .slot {
-        border-radius: 14px;
-    }
-
-    .controls {
-        margin-top: 7px;
-    }
-
-    .buy {
-        min-height: 47px;
-        font-size: 15px;
-    }
-
-    .save-panel {
-        padding: 10px 9px;
-    }
-
-    .save-area {
-        height: 60px;
-    }
-
-    .save-buttons button {
-        min-height: 30px;
-    }
-}
-
-@media (max-height: 560px) {
-
-    .title {
-        font-size: 25px;
-    }
-
-    .save-area {
-        height: 48px;
-    }
-
-    .save-buttons button {
-        min-height: 27px;
-    }
-}
 
 /* =========================================================
-   PETIT DÉZOOM POUR QUE TOUT SOIT VISIBLE
-========================================================= */
+   PETITS ÉCRANS
+   ========================================================= */
 
 @media (max-height: 750px) {
 
     .game {
 
-        transform: scale(.88);
+        transform:
+            scale(.88);
 
         transform-origin:
             center center;
     }
 }
 
+
 </style>
+
 </head>
+
 
 <body>
 
+
+<!-- =======================================================
+     SAUVEGARDE
+     IMPORTANT : ce panneau est EN DEHORS de .game
+     pour que position:fixed reste relatif à l'écran.
+     ======================================================= -->
+
+<div class="save-panel">
+
+    <div class="save-title">
+        Sauvegarde
+    </div>
+
+    <textarea
+        id="saveArea"
+        class="save-area"
+        placeholder="Code..."
+        spellcheck="false"
+    ></textarea>
+
+    <div class="save-buttons">
+
+        <button
+            id="copyButton"
+            type="button"
+        >
+            Copier
+        </button>
+
+        <button
+            id="pasteButton"
+            type="button"
+        >
+            Coller
+        </button>
+
+        <button
+            id="importButton"
+            type="button"
+        >
+            Charger
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     JEU
+     ======================================================= -->
+
 <div class="game">
+
 
     <div class="header">
 
@@ -1005,123 +892,169 @@ body {
 
     </div>
 
+
     <div
-        class="board"
         id="board"
+        class="board"
     >
 
-        <div class="slot empty" data-index="0"></div>
-        <div class="slot empty" data-index="1"></div>
-        <div class="slot empty" data-index="2"></div>
-        <div class="slot empty" data-index="3"></div>
-        <div class="slot empty" data-index="4"></div>
-        <div class="slot empty" data-index="5"></div>
-        <div class="slot empty" data-index="6"></div>
-        <div class="slot empty" data-index="7"></div>
-        <div class="slot empty" data-index="8"></div>
+        <div
+            class="slot empty"
+            data-index="0"
+        ></div>
+
+        <div
+            class="slot empty"
+            data-index="1"
+        ></div>
+
+        <div
+            class="slot empty"
+            data-index="2"
+        ></div>
+
+        <div
+            class="slot empty"
+            data-index="3"
+        ></div>
+
+        <div
+            class="slot empty"
+            data-index="4"
+        ></div>
+
+        <div
+            class="slot empty"
+            data-index="5"
+        ></div>
+
+        <div
+            class="slot empty"
+            data-index="6"
+        ></div>
+
+        <div
+            class="slot empty"
+            data-index="7"
+        ></div>
+
+        <div
+            class="slot empty"
+            data-index="8"
+        ></div>
 
     </div>
+
+
+    <button
+        id="buyButton"
+        class="buy"
+        type="button"
+    >
+        ＋ Ajouter un slime
+    </button>
+
 
     <div
-        class="message"
         id="message"
+        class="message"
     ></div>
 
-    <div class="controls">
-
-        <button
-            class="buy"
-            id="buyButton"
-            type="button"
-        >
-            ＋ Ajouter un slime
-        </button>
-
-    </div>
-
-    <div class="save-panel">
-
-        <div class="save-title">
-            Sauvegarde
-        </div>
-
-        <textarea
-            id="saveArea"
-            class="save-area"
-            placeholder="Code..."
-            spellcheck="false"
-        ></textarea>
-
-        <div class="save-buttons">
-
-            <button
-                id="copyButton"
-                type="button"
-            >
-                Copier
-            </button>
-
-            <button
-                id="pasteButton"
-                type="button"
-            >
-                Coller
-            </button>
-
-            <button
-                id="importButton"
-                type="button"
-            >
-                Charger
-            </button>
-
-        </div>
-
-    </div>
 
 </div>
 
+
 <script>
 
+
+/* =========================================================
+   DONNÉES
+   ========================================================= */
+
 const MAX_LEVEL = 10;
+
 
 const LEVEL_NAMES = [
 
     "Petit slime",
+
     "Slime bleu",
+
     "Slime magique",
+
     "Slime doré",
+
     "Slime rose",
+
     "Slime royal",
+
     "Slime solaire",
+
     "Slime céleste",
+
     "Slime légendaire",
+
     "Slime ultime"
 
 ];
 
+
 const LEVEL_ICONS = [
 
     "🫧",
+
     "💧",
+
     "🔮",
+
     "✨",
+
     "💗",
+
     "👑",
+
     "☀️",
+
     "🌙",
+
     "💎",
+
     "🌟"
 
 ];
 
+
+/* =========================================================
+   ÉTAT
+   ========================================================= */
+
 let slots = [
 
-    null, null, null,
-    null, null, null,
-    null, null, null
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
 
 ];
+
+
+let draggedIndex = null;
+
+let draggedElement = null;
+
+let pointerId = null;
+
+let dragClone = null;
+
+
+/* =========================================================
+   ÉLÉMENTS
+   ========================================================= */
 
 const board =
     document.getElementById("board");
@@ -1129,43 +1062,44 @@ const board =
 const buyButton =
     document.getElementById("buyButton");
 
-const messageElement =
+const message =
     document.getElementById("message");
 
 const saveArea =
     document.getElementById("saveArea");
 
-let drag = {
 
-    active: false,
+/* =========================================================
+   MESSAGE
+   ========================================================= */
 
-    index: null,
+let messageTimer = null;
 
-    pointerId: null,
-
-    clone: null
-
-};
-
-let messageTimer;
 
 function showMessage(text) {
 
-    messageElement.textContent =
-        text;
+    message.textContent = text;
+
+    message.classList.add("show");
 
     clearTimeout(messageTimer);
 
-    messageTimer =
-        setTimeout(() => {
+    messageTimer = setTimeout(
+        () => {
 
-            messageElement.textContent =
-                "";
+            message.classList.remove("show");
 
-        }, 1800);
+        },
+        1500
+    );
 }
 
-function createSlime(
+
+/* =========================================================
+   CRÉATION D'UN SLIME
+   ========================================================= */
+
+function createSlimeElement(
     level,
     index
 ) {
@@ -1174,55 +1108,103 @@ function createSlime(
         document.createElement("div");
 
     slime.className =
-        `slime level-${level}`;
+        "slime level-" + level;
 
     slime.dataset.index =
         index;
 
-    slime.innerHTML = `
+    slime.dataset.level =
+        level;
 
-        <div class="slime-content">
 
-            <div class="slime-icon">
-                ${LEVEL_ICONS[level - 1]}
-            </div>
+    const face =
+        document.createElement("div");
 
-            <div class="level">
-                Niveau ${level}
-            </div>
+    face.className =
+        "face";
 
-            <div class="level-name">
-                ${LEVEL_NAMES[level - 1]}
-            </div>
 
-        </div>
+    const eye1 =
+        document.createElement("div");
 
-    `;
+    eye1.className =
+        "eye";
 
-    slime.addEventListener(
-        "pointerdown",
-        startDrag
+
+    const eye2 =
+        document.createElement("div");
+
+    eye2.className =
+        "eye";
+
+
+    const mouth =
+        document.createElement("div");
+
+    mouth.className =
+        "mouth";
+
+
+    face.appendChild(eye1);
+
+    face.appendChild(eye2);
+
+    face.appendChild(mouth);
+
+
+    const icon =
+        document.createElement("div");
+
+    icon.className =
+        "level-icon";
+
+    icon.textContent =
+        LEVEL_ICONS[level - 1];
+
+
+    slime.appendChild(face);
+
+    slime.appendChild(icon);
+
+
+    addDragEvents(
+        slime,
+        index
     );
+
 
     return slime;
 }
 
+
+/* =========================================================
+   AFFICHAGE
+   ========================================================= */
+
 function renderBoard(
-    animationIndex = -1
+    animationIndex = -1,
+    animationClass = "new-animation"
 ) {
 
-    const slotsElements =
+    const slotElements =
         board.querySelectorAll(".slot");
 
-    slotsElements.forEach(
+
+    slotElements.forEach(
         (slotElement, index) => {
 
             slotElement.innerHTML = "";
 
-            const data =
+            slotElement.classList.remove(
+                "empty"
+            );
+
+
+            const slime =
                 slots[index];
 
-            if (!data) {
+
+            if (!slime) {
 
                 slotElement.classList.add(
                     "empty"
@@ -1231,42 +1213,37 @@ function renderBoard(
                 return;
             }
 
-            slotElement.classList.remove(
-                "empty"
-            );
 
-            const slime =
-                createSlime(
-                    data.level,
+            const slimeElement =
+                createSlimeElement(
+                    slime.level,
                     index
                 );
 
-            if (
-                animationIndex === index
-            ) {
 
-                slime.classList.add(
-                    "appear"
+            if (index === animationIndex) {
+
+                slimeElement.classList.add(
+                    animationClass
                 );
             }
 
+
             slotElement.appendChild(
-                slime
+                slimeElement
             );
 
         }
     );
 
-    updateBuyButton();
+
+    autosave();
 }
 
-function updateBuyButton() {
 
-    buyButton.disabled =
-        slots.every(
-            slot => slot !== null
-        );
-}
+/* =========================================================
+   AJOUT
+   ========================================================= */
 
 buyButton.addEventListener(
     "pointerdown",
@@ -1274,10 +1251,12 @@ buyButton.addEventListener(
 
         event.preventDefault();
 
+
         const index =
             slots.findIndex(
                 slot => slot === null
             );
+
 
         if (index === -1) {
 
@@ -1288,13 +1267,16 @@ buyButton.addEventListener(
             return;
         }
 
+
         slots[index] = {
 
             level: 1
 
         };
 
+
         renderBoard(index);
+
 
         showMessage(
             "Nouveau slime !"
@@ -1306,6 +1288,7 @@ buyButton.addEventListener(
     }
 );
 
+
 buyButton.addEventListener(
     "click",
     event => {
@@ -1314,6 +1297,385 @@ buyButton.addEventListener(
 
     }
 );
+
+
+/* =========================================================
+   DRAG
+   ========================================================= */
+
+function addDragEvents(
+    slime,
+    index
+) {
+
+
+    slime.addEventListener(
+        "pointerdown",
+        event => {
+
+            if (
+                event.pointerType === "mouse" &&
+                event.button !== 0
+            ) {
+
+                return;
+            }
+
+
+            event.preventDefault();
+
+
+            draggedIndex =
+                index;
+
+            pointerId =
+                event.pointerId;
+
+            draggedElement =
+                slime;
+
+
+            try {
+
+                slime.setPointerCapture(
+                    pointerId
+                );
+
+            } catch {}
+
+
+            slime.classList.add(
+                "dragging"
+            );
+
+
+            createDragClone(
+                slime,
+                event.clientX,
+                event.clientY
+            );
+
+        },
+        {
+            passive: false
+        }
+    );
+
+
+    slime.addEventListener(
+        "pointermove",
+        event => {
+
+            if (
+                draggedIndex === null ||
+                event.pointerId !== pointerId
+            ) {
+
+                return;
+            }
+
+
+            event.preventDefault();
+
+
+            moveDragClone(
+                event.clientX,
+                event.clientY
+            );
+
+        },
+        {
+            passive: false
+        }
+    );
+
+
+    slime.addEventListener(
+        "pointerup",
+        event => {
+
+            if (
+                event.pointerId !== pointerId
+            ) {
+
+                return;
+            }
+
+
+            event.preventDefault();
+
+
+            finishDrag(
+                event.clientX,
+                event.clientY
+            );
+
+        },
+        {
+            passive: false
+        }
+    );
+
+
+    slime.addEventListener(
+        "pointercancel",
+        event => {
+
+            if (
+                event.pointerId !== pointerId
+            ) {
+
+                return;
+            }
+
+
+            cancelDrag();
+
+        },
+        {
+            passive: false
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CLONE DU SLIME
+   ========================================================= */
+
+function createDragClone(
+    slime,
+    x,
+    y
+) {
+
+    dragClone =
+        slime.cloneNode(true);
+
+
+    dragClone.style.position =
+        "fixed";
+
+    dragClone.style.left =
+        x + "px";
+
+    dragClone.style.top =
+        y + "px";
+
+    dragClone.style.width =
+        slime.getBoundingClientRect().width + "px";
+
+    dragClone.style.height =
+        slime.getBoundingClientRect().height + "px";
+
+    dragClone.style.transform =
+        "translate(-50%, -50%) scale(1.12)";
+
+    dragClone.style.pointerEvents =
+        "none";
+
+    dragClone.style.zIndex =
+        "99999";
+
+    dragClone.classList.remove(
+        "dragging"
+    );
+
+
+    document.body.appendChild(
+        dragClone
+    );
+}
+
+
+/* =========================================================
+   DÉPLACEMENT DU CLONE
+   ========================================================= */
+
+function moveDragClone(
+    x,
+    y
+) {
+
+    if (!dragClone) {
+
+        return;
+    }
+
+
+    dragClone.style.left =
+        x + "px";
+
+    dragClone.style.top =
+        y + "px";
+}
+
+
+/* =========================================================
+   FIN DU DRAG
+   ========================================================= */
+
+function finishDrag(
+    x,
+    y
+) {
+
+    const target =
+        getSlotAtPoint(
+            x,
+            y
+        );
+
+
+    if (
+        target === null ||
+        draggedIndex === null
+    ) {
+
+        cancelDrag();
+
+        return;
+    }
+
+
+    const from =
+        draggedIndex;
+
+
+    const to =
+        target;
+
+
+    const sourceSlime =
+        slots[from];
+
+
+    const targetSlime =
+        slots[to];
+
+
+    if (!sourceSlime) {
+
+        cancelDrag();
+
+        return;
+    }
+
+
+    /* Même case */
+
+    if (from === to) {
+
+        cancelDrag();
+
+        return;
+    }
+
+
+    /* Case vide */
+
+    if (!targetSlime) {
+
+        slots[to] =
+            sourceSlime;
+
+        slots[from] =
+            null;
+
+
+        cleanupDrag();
+
+
+        renderBoard(
+            to,
+            "new-animation"
+        );
+
+
+        autosave();
+
+        return;
+    }
+
+
+    /* Même niveau = fusion */
+
+    if (
+        targetSlime.level ===
+        sourceSlime.level
+    ) {
+
+
+        if (
+            sourceSlime.level >=
+            MAX_LEVEL
+        ) {
+
+            showMessage(
+                "Niveau maximum atteint."
+            );
+
+            cancelDrag();
+
+            return;
+        }
+
+
+        slots[to] = {
+
+            level:
+                sourceSlime.level + 1
+
+        };
+
+
+        slots[from] =
+            null;
+
+
+        cleanupDrag();
+
+
+        renderBoard(
+            to,
+            "merge-animation"
+        );
+
+
+        showMessage(
+            "Fusion !"
+        );
+
+
+        autosave();
+
+        return;
+    }
+
+
+    /* Niveaux différents = échange */
+
+    slots[from] =
+        targetSlime;
+
+    slots[to] =
+        sourceSlime;
+
+
+    cleanupDrag();
+
+
+    renderBoard();
+
+
+    autosave();
+}
+
+
+/* =========================================================
+   TROUVER UNE CASE
+   ========================================================= */
 
 function getSlotAtPoint(
     x,
@@ -1326,6 +1688,7 @@ function getSlotAtPoint(
             y
         );
 
+
     for (
         const element
         of elements
@@ -1333,6 +1696,7 @@ function getSlotAtPoint(
 
         const slot =
             element.closest(".slot");
+
 
         if (
             slot &&
@@ -1342,441 +1706,60 @@ function getSlotAtPoint(
             return Number(
                 slot.dataset.index
             );
-
         }
-
     }
+
 
     return null;
 }
 
-function createDragClone(
-    level
-) {
 
-    const clone =
-        document.createElement("div");
+/* =========================================================
+   ANNULER DRAG
+   ========================================================= */
 
-    clone.className =
-        "drag-clone";
+function cancelDrag() {
 
-    const slime =
-        createSlime(
-            level,
-            -1
-        );
-
-    slime.style.pointerEvents =
-        "none";
-
-    clone.appendChild(
-        slime
-    );
-
-    document.body.appendChild(
-        clone
-    );
-
-    return clone;
+    cleanupDrag();
 }
 
-function moveClone(
-    x,
-    y
-) {
 
-    if (!drag.clone)
-        return;
+/* =========================================================
+   NETTOYAGE DRAG
+   ========================================================= */
 
-    drag.clone.style.left =
-        x + "px";
+function cleanupDrag() {
 
-    drag.clone.style.top =
-        y + "px";
-}
+    if (draggedElement) {
 
-function clearTargets() {
-
-    board
-        .querySelectorAll(".slot")
-        .forEach(slot => {
-
-            slot.classList.remove(
-                "target",
-                "target-merge"
-            );
-
-        });
-}
-
-function updateTarget(
-    x,
-    y
-) {
-
-    clearTargets();
-
-    const target =
-        getSlotAtPoint(
-            x,
-            y
-        );
-
-    if (
-        target === null ||
-        target === drag.index
-    ) {
-
-        return;
-    }
-
-    const targetSlot =
-        board.querySelector(
-            `.slot[data-index="${target}"]`
-        );
-
-    if (!targetSlot)
-        return;
-
-    const source =
-        slots[drag.index];
-
-    const destination =
-        slots[target];
-
-    if (
-        source &&
-        destination &&
-        source.level ===
-        destination.level &&
-        source.level < MAX_LEVEL
-    ) {
-
-        targetSlot.classList.add(
-            "target-merge"
-        );
-
-    } else {
-
-        targetSlot.classList.add(
-            "target"
-        );
-    }
-}
-
-function startDrag(event) {
-
-    if (
-        event.pointerType !== "touch" &&
-        event.pointerType !== "pen"
-    ) {
-
-        return;
-    }
-
-    const slime =
-        event.currentTarget;
-
-    const index =
-        Number(slime.dataset.index);
-
-    if (
-        !slots[index]
-    ) {
-
-        return;
-    }
-
-    event.preventDefault();
-
-    try {
-
-        slime.setPointerCapture(
-            event.pointerId
-        );
-
-    } catch {}
-
-    drag.active = true;
-
-    drag.index =
-        index;
-
-    drag.pointerId =
-        event.pointerId;
-
-    slime.style.opacity =
-        ".18";
-
-    slime.classList.add(
-        "dragging"
-    );
-
-    drag.clone =
-        createDragClone(
-            slots[index].level
-        );
-
-    moveClone(
-        event.clientX,
-        event.clientY
-    );
-
-    clearTargets();
-}
-
-document.addEventListener(
-    "pointermove",
-    event => {
-
-        if (
-            !drag.active ||
-            event.pointerId !==
-            drag.pointerId
-        ) {
-
-            return;
-        }
-
-        event.preventDefault();
-
-        moveClone(
-            event.clientX,
-            event.clientY
-        );
-
-        updateTarget(
-            event.clientX,
-            event.clientY
-        );
-
-    },
-    {
-        passive: false
-    }
-);
-
-document.addEventListener(
-    "pointerup",
-    finishDrag
-);
-
-document.addEventListener(
-    "pointercancel",
-    finishDrag
-);
-
-function finishDrag(event) {
-
-    if (
-        !drag.active ||
-        event.pointerId !==
-        drag.pointerId
-    ) {
-
-        return;
-    }
-
-    event.preventDefault();
-
-    const from =
-        drag.index;
-
-    const to =
-        getSlotAtPoint(
-            event.clientX,
-            event.clientY
-        );
-
-    if (drag.clone) {
-
-        drag.clone.remove();
-
-        drag.clone =
-            null;
-    }
-
-    const original =
-        board.querySelector(
-            `.slot[data-index="${from}"] .slime`
-        );
-
-    if (original) {
-
-        original.style.opacity =
-            "1";
-
-        original.classList.remove(
+        draggedElement.classList.remove(
             "dragging"
         );
     }
 
-    clearTargets();
 
-    drag.active =
-        false;
+    if (dragClone) {
 
-    drag.index =
+        dragClone.remove();
+
+        dragClone = null;
+    }
+
+
+    draggedElement =
         null;
 
-    drag.pointerId =
+    draggedIndex =
         null;
 
-    if (
-        to === null ||
-        to === from
-    ) {
-
-        renderBoard();
-
-        return;
-    }
-
-    moveOrMerge(
-        from,
-        to,
-        event.clientX,
-        event.clientY
-    );
-
-}
-
-function moveOrMerge(
-    from,
-    to,
-    x,
-    y
-) {
-
-    const source =
-        slots[from];
-
-    const target =
-        slots[to];
-
-    if (!source)
-        return;
-
-    if (!target) {
-
-        slots[to] =
-            source;
-
-        slots[from] =
-            null;
-
-        renderBoard(to);
-
-        return;
-    }
-
-    if (
-        source.level !==
-        target.level
-    ) {
-
-        slots[from] =
-            target;
-
-        slots[to] =
-            source;
-
-        renderBoard(to);
-
-        return;
-    }
-
-    if (
-        source.level >=
-        MAX_LEVEL
-    ) {
-
-        showMessage(
-            "Niveau maximum !"
-        );
-
-        renderBoard();
-
-        return;
-    }
-
-    const newLevel =
-        source.level + 1;
-
-    slots[to] = {
-
-        level: newLevel
-
-    };
-
-    slots[from] =
+    pointerId =
         null;
-
-    renderBoard(to);
-
-    setTimeout(
-        () => {
-
-            const newSlime =
-                board.querySelector(
-                    `.slot[data-index="${to}"] .slime`
-                );
-
-            if (newSlime) {
-
-                newSlime.classList.add(
-                    "merge-pop"
-                );
-
-            }
-
-        },
-        10
-    );
-
-    createMergeFlash(
-        x,
-        y
-    );
-
-    showMessage(
-        `Niveau ${newLevel} !`
-    );
-
 }
 
-function createMergeFlash(
-    x,
-    y
-) {
 
-    const flash =
-        document.createElement(
-            "div"
-        );
-
-    flash.className =
-        "merge-flash";
-
-    flash.style.left =
-        x + "px";
-
-    flash.style.top =
-        y + "px";
-
-    document.body.appendChild(
-        flash
-    );
-
-    setTimeout(
-        () => {
-
-            flash.remove();
-
-        },
-        600
-    );
-}
+/* =========================================================
+   SAUVEGARDE
+   ========================================================= */
 
 function createSave() {
 
@@ -1786,17 +1769,27 @@ function createSave() {
 
         slots: slots,
 
-        savedAt: Date.now()
+        savedAt:
+            Date.now()
 
     };
+
 
     const json =
         JSON.stringify(data);
 
+
     return btoa(
-        encodeURIComponent(json)
+        encodeURIComponent(
+            json
+        )
     );
 }
+
+
+/* =========================================================
+   CHARGEMENT
+   ========================================================= */
 
 function loadSave(
     code
@@ -1806,65 +1799,95 @@ function loadSave(
 
         const json =
             decodeURIComponent(
-                atob(code.trim())
+                atob(code)
             );
+
 
         const data =
             JSON.parse(json);
 
+
         if (
             !data ||
-            !Array.isArray(data.slots) ||
+            !Array.isArray(
+                data.slots
+            ) ||
             data.slots.length !== 9
         ) {
 
-            throw new Error();
-
+            return false;
         }
 
-        for (
-            const slot
-            of data.slots
-        ) {
 
-            if (
-                slot !== null
-            ) {
+        const valid =
+            data.slots.every(
+                slot => {
 
-                if (
-                    typeof slot.level !==
-                    "number" ||
-                    slot.level < 1 ||
-                    slot.level >
-                    MAX_LEVEL
-                ) {
+                    if (
+                        slot === null
+                    ) {
 
-                    throw new Error();
+                        return true;
+                    }
+
+
+                    return (
+                        typeof slot === "object" &&
+                        Number.isInteger(
+                            slot.level
+                        ) &&
+                        slot.level >= 1 &&
+                        slot.level <= MAX_LEVEL
+                    );
 
                 }
+            );
 
-            }
 
+        if (!valid) {
+
+            return false;
         }
 
+
         slots =
-            data.slots;
+            data.slots.map(
+                slot => {
+
+                    if (
+                        slot === null
+                    ) {
+
+                        return null;
+                    }
+
+
+                    return {
+
+                        level:
+                            slot.level
+
+                    };
+
+                }
+            );
+
 
         renderBoard();
+
 
         return true;
 
     } catch {
 
         return false;
-
     }
 }
 
 
 /* =========================================================
-   COPIER DIRECTEMENT
-========================================================= */
+   COPIER
+   ========================================================= */
 
 document
     .getElementById("copyButton")
@@ -1875,14 +1898,17 @@ document
             const code =
                 createSave();
 
+
             saveArea.value =
                 code;
 
+
             try {
 
-                await navigator
-                    .clipboard
-                    .writeText(code);
+                await navigator.clipboard.writeText(
+                    code
+                );
+
 
                 showMessage(
                     "Sauvegarde copiée !"
@@ -1901,8 +1927,8 @@ document
 
 
 /* =========================================================
-   COLLER DIRECTEMENT
-========================================================= */
+   COLLER
+   ========================================================= */
 
 document
     .getElementById("pasteButton")
@@ -1913,9 +1939,8 @@ document
             try {
 
                 const text =
-                    await navigator
-                        .clipboard
-                        .readText();
+                    await navigator.clipboard.readText();
+
 
                 if (!text) {
 
@@ -1926,8 +1951,10 @@ document
                     return;
                 }
 
+
                 saveArea.value =
                     text.trim();
+
 
                 showMessage(
                     "Sauvegarde collée !"
@@ -1947,7 +1974,7 @@ document
 
 /* =========================================================
    CHARGER
-========================================================= */
+   ========================================================= */
 
 document
     .getElementById("importButton")
@@ -1958,6 +1985,7 @@ document
             const code =
                 saveArea.value.trim();
 
+
             if (!code) {
 
                 showMessage(
@@ -1966,6 +1994,7 @@ document
 
                 return;
             }
+
 
             if (
                 loadSave(code)
@@ -1988,51 +2017,57 @@ document
 
 
 /* =========================================================
-   SAUVEGARDE AUTOMATIQUE
-========================================================= */
+   AUTOSAVE
+   ========================================================= */
 
-setInterval(
-    () => {
-
-        try {
-
-            localStorage.setItem(
-                "slimeMergeAutoSave",
-                createSave()
-            );
-
-        } catch {}
-
-    },
-    3000
-);
-
-function loadAutomaticSave() {
+function autosave() {
 
     try {
 
-        const saved =
+        localStorage.setItem(
+            "slimeMergeAutoSave",
+            createSave()
+        );
+
+    } catch {}
+
+}
+
+
+function loadAutoSave() {
+
+    try {
+
+        const code =
             localStorage.getItem(
                 "slimeMergeAutoSave"
             );
 
-        if (
-            saved &&
-            loadSave(saved)
-        ) {
 
-            return;
+        if (code) {
+
+            loadSave(code);
+
         }
 
     } catch {}
 
-    renderBoard();
 }
 
 
 /* =========================================================
+   SAUVEGARDE AUTOMATIQUE
+   ========================================================= */
+
+setInterval(
+    autosave,
+    3000
+);
+
+
+/* =========================================================
    EMPÊCHER LE ZOOM
-========================================================= */
+   ========================================================= */
 
 document.addEventListener(
     "gesturestart",
@@ -2046,6 +2081,7 @@ document.addEventListener(
     }
 );
 
+
 document.addEventListener(
     "gesturechange",
     event => {
@@ -2057,6 +2093,7 @@ document.addEventListener(
         passive: false
     }
 );
+
 
 document.addEventListener(
     "gestureend",
@@ -2070,7 +2107,10 @@ document.addEventListener(
     }
 );
 
-let lastTouchEnd = 0;
+
+let lastTouchEnd =
+    0;
+
 
 document.addEventListener(
     "touchend",
@@ -2079,6 +2119,7 @@ document.addEventListener(
         const now =
             Date.now();
 
+
         if (
             now - lastTouchEnd <= 300
         ) {
@@ -2086,6 +2127,7 @@ document.addEventListener(
             event.preventDefault();
 
         }
+
 
         lastTouchEnd =
             now;
@@ -2096,9 +2138,19 @@ document.addEventListener(
     }
 );
 
-loadAutomaticSave();
+
+/* =========================================================
+   INITIALISATION
+   ========================================================= */
+
+loadAutoSave();
+
+
+renderBoard();
+
 
 </script>
 
 </body>
+
 </html>
